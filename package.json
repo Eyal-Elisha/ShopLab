@@ -1,0 +1,16 @@
+{
+  "name": "shoplab",
+  "private": true,
+  "version": "1.0.0",
+  "description": "ShopLab monorepo root for the web app, API, and database assets.",
+  "scripts": {
+    "bootstrap": "npm install --prefix apps/web && npm install --prefix apps/api",
+    "dev:web": "npm run dev --prefix apps/web",
+    "dev:api": "npm run dev --prefix apps/api",
+    "build": "npm run build --prefix apps/web",
+    "start": "npm run build && npm run start --prefix apps/api",
+    "start:api": "npm run start --prefix apps/api",
+    "lint": "npm run lint --prefix apps/web",
+    "test": "npm run test --prefix apps/web"
+  }
+}

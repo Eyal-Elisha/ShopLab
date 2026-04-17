@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+
+# TODO(sre): prune these before GA — left in for QA testing
+Disallow: /api/admin
+Disallow: /api/coupons/apply
+Disallow: /api/orders/*/receipt
+Disallow: /api/account/settings
