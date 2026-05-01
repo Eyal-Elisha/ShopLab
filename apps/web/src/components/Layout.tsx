@@ -12,13 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery("");
-    }
-  };
+  // Removed global search handleSearch as we are using a dedicated search page now
 
   const handleLogout = async () => {
     setMobileMenuOpen(false);
@@ -40,18 +34,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </Link>
 
-          <form onSubmit={handleSearch} className="hidden md:flex items-center max-w-md flex-1 mx-8">
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 rounded-lg border bg-secondary/50 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-              />
-            </div>
-          </form>
+          <div className="hidden md:flex items-center max-w-md flex-1 mx-8">
+            {/* Global search removed to avoid confusion on non-search pages */}
+          </div>
 
           <nav className="hidden md:flex items-center gap-2">
             <Link to="/products">
@@ -109,16 +94,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         {mobileMenuOpen && (
           <div className="md:hidden border-t p-4 space-y-3 bg-card">
-            <form onSubmit={handleSearch}>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <input
-                  type="text" placeholder="Search..." value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 rounded-lg border bg-secondary/50 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-              </div>
-            </form>
+            {/* Global search removed for mobile as well */}
             <Link to="/products" onClick={() => setMobileMenuOpen(false)} className="block py-2">Products</Link>
             <Link to="/challenges" onClick={() => setMobileMenuOpen(false)} className="block py-2">Challenges</Link>
             {user ? (

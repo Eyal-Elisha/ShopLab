@@ -155,3 +155,14 @@ INSERT INTO orders (user_id, total, status, shipping_address, staff_notes) VALUE
 
 INSERT INTO order_items (order_id, product_id, quantity, price_at_time) VALUES
 (1, 1, 1, 0.00);
+
+-- System settings (Used for SQL Injection Challenge)
+CREATE TABLE system_settings (
+    id SERIAL PRIMARY KEY,
+    key VARCHAR(100) UNIQUE NOT NULL,
+    value TEXT NOT NULL
+);
+
+INSERT INTO system_settings (key, value) VALUES
+('maintenance_mode', 'false'),
+('site_flag', 'SHOPLAB{h1dd3n_d4t4_un10n_str1k3s}');
