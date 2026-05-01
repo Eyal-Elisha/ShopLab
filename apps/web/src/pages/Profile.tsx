@@ -1,29 +1,30 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { api, extractApiError, type AuthUser } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import ProfileDetailsForm from "@/components/profile/ProfileDetailsForm";
 import PasswordForm from "@/components/profile/PasswordForm";
 
 export default function Profile() {
+  const { userId: routeUserId = "" } = useParams();
   const { user, setUser, isReady } = useAuth();
-  const userId = user?.id;
   const [profile, setProfile] = useState<AuthUser | null>(user);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isOwnProfile = Boolean(user && Number(routeUserId) === user.id);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!user || !routeUserId) return;
 
-    api.getCurrentUser()
+    setLoading(true);
+    api.getUserProfileById(routeUserId)
       .then((response) => {
-        setUser(response.user);
         setProfile(response.user);
         setError(null);
       })
       .catch((err) => setError(extractApiError(err)))
       .finally(() => setLoading(false));
-  }, [setUser, userId]);
+  }, [routeUserId, user]);
 
   const handleProfileUpdated = (updatedUser: AuthUser) => {
     setUser(updatedUser);
@@ -50,12 +51,23 @@ export default function Profile() {
       {error && <div className="mb-4 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>}
 
       <div className="grid max-w-2xl gap-6">
-        <ProfileDetailsForm
-          user={profile}
-          loading={loading}
-          onUpdated={handleProfileUpdated}
-        />
-        <PasswordForm loading={loading} />
+        {isOwnProfile ? (
+          <>
+            <ProfileDetailsForm
+              user={profile}
+              loading={loading}
+              onUpdated={handleProfileUpdated}
+            />
+            <PasswordForm loading={loading} />
+          </>
+        ) : (
+          <div className="rounded-lg border bg-card p-6">
+            <h2 className="font-display text-xl font-semibold">Access Denied</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              You are not authorized to view this profile.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

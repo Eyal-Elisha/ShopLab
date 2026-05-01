@@ -85,7 +85,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </Button>
                 </Link>
                 <div className="flex items-center gap-2 ml-2 pl-2 border-l">
-                  <Link to="/profile" className="text-sm text-muted-foreground hover:text-foreground">
+                  <Link to={`/profile/${user.id}`} className="text-sm text-muted-foreground hover:text-foreground">
                     {user.username}
                   </Link>
                   <Button variant="ghost" size="icon" onClick={handleLogout}>
@@ -124,7 +124,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             {user ? (
               <>
                 <Link to="/orders" onClick={() => setMobileMenuOpen(false)} className="block py-2">Orders</Link>
-                <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="block py-2">Profile</Link>
+                <Link to={`/profile/${user.id}`} onClick={() => setMobileMenuOpen(false)} className="block py-2">Profile</Link>
                 <Link to="/cart" onClick={() => setMobileMenuOpen(false)} className="block py-2">Cart ({totalItems})</Link>
                 {isAdmin && <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-primary">Admin</Link>}
                 <Button variant="outline" className="w-full" onClick={handleLogout}>Logout</Button>

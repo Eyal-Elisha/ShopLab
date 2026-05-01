@@ -183,6 +183,8 @@ export const api = {
   logout: () => request<{ success: boolean }>("/auth/logout", { method: "POST" }),
   getProfile: () => request<{ user: AuthUser }>("/auth/profile"),
   getCurrentUser: () => request<{ user: AuthUser }>("/user/me"),
+  getUserProfileById: (userId: string | number) =>
+    request<{ user: AuthUser & Record<string, unknown> }>(`/users/${userId}/profile`),
   updateCurrentUser: (body: { username: string; email: string }) =>
     request<{ user: AuthUser; message: string }>("/user/me", {
       method: "PUT",

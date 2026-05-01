@@ -38,6 +38,7 @@ app.use(requestLogger);
 // ── Routes ──────────────────────────────────────────────────
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/user', require('./routes/user'));
+app.use('/api/users', require('./routes/users'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/orders', require('./routes/orders'));
 app.use('/api/cart', require('./routes/cart'));
@@ -61,6 +62,7 @@ app.get('/api', (req, res) => {
     endpoints: {
       auth:       ['POST /api/auth/register', 'POST /api/auth/login', 'POST /api/auth/logout', 'GET /api/auth/profile'],
       user:       ['GET /api/user/me', 'PUT /api/user/me', 'PUT /api/user/me/password'],
+      users:      ['GET /api/users/:userId/profile'],
       products:   ['GET /api/products', 'GET /api/products/:id', 'GET /api/products/:id/reviews', 'POST /api/products/:id/reviews'],
       orders:     ['GET /api/orders', 'GET /api/orders/:id', 'POST /api/orders/checkout', 'GET /api/orders/:id/receipt'],
       cart:       ['GET /api/cart', 'POST /api/cart/add', 'DELETE /api/cart/:itemId'],

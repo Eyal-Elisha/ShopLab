@@ -1,10 +1,12 @@
 const brokenAccessControlDef = require('./definitions/brokenAccessControl');
+const profileBolaDef = require('./definitions/profileBola');
 
 /**
  * Register challenges here.
  */
 const registeredChallenges = [
   { definition: brokenAccessControlDef },
+  { definition: profileBolaDef },
 ];
 
 const definitions = registeredChallenges.map((entry) => entry.definition);
