@@ -47,6 +47,7 @@ app.use('/api/coupons', require('./routes/coupons'));
 app.use('/api/account', require('./routes/account'));
 app.use('/api/challenges', require('./routes/challenges'));
 app.use('/api/hints', require('./routes/hints'));
+app.use('/api/support-chat', require('./routes/supportChat'));
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
@@ -70,6 +71,7 @@ app.get('/api', (req, res) => {
       coupons:    ['POST /api/coupons/apply'],
       admin:      ['GET /api/admin/dashboard', 'PUT /api/admin/users/:userId/role', 'GET /api/admin/flag'],
       challenges: ['GET /api/challenges', 'POST /api/challenges/solve', 'GET /api/hints/:slug'],
+      supportChat: ['POST /api/support-chat'],
       health:     ['GET /api/health'],
     },
   });

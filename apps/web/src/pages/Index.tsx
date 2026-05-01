@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { mockProducts } from "@/data/mockData";
 import { ShoppingCart, Search, Shield, ArrowRight, Star } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { SupportChatDock } from "@/components/SupportChatWidget";
 
 export default function Index() {
   const { addItem } = useCart();
@@ -81,6 +82,8 @@ export default function Index() {
           ))}
         </div>
       </section>
+
+      <SupportChatDock />
     </div>
   );
 }

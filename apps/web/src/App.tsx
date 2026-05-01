@@ -17,6 +17,7 @@ import Orders from "./pages/Orders";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
 import Challenges from "./pages/Challenges";
+import SupportBot from "./pages/SupportBot";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,6 +43,7 @@ const App = () => (
                 <Route path="/profile/:userId" element={<Profile />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/challenges" element={<Challenges />} />
+                <Route path="/support-bot" element={<SupportBot />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Layout>
