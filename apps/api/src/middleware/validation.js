@@ -25,6 +25,23 @@ const loginRules = [
   body('password').notEmpty().withMessage('Password required'),
 ];
 
+const userProfileRules = [
+  body('username')
+    .trim()
+    .isLength({ min: 3, max: 50 })
+    .withMessage('Username must be 3-50 characters')
+    .isAlphanumeric()
+    .withMessage('Username must be alphanumeric'),
+  body('email').trim().isEmail().normalizeEmail().withMessage('Valid email required'),
+  body(['id', 'role', 'isAdmin', 'password', 'password_hash']).not().exists().withMessage('Unsupported profile field'),
+];
+
+const passwordRules = [
+  body('currentPassword').notEmpty().withMessage('Current password required'),
+  body('newPassword').isLength({ min: 8 }).withMessage('New password must be at least 8 characters'),
+  body(['id', 'username', 'email', 'role', 'isAdmin', 'password_hash']).not().exists().withMessage('Unsupported password field'),
+];
+
 const productRules = [
   body('name').trim().isLength({ min: 1, max: 255 }).withMessage('Product name required'),
   body('description').optional().trim().isLength({ max: 5000 }),
@@ -43,4 +60,4 @@ const searchRules = [
   query('q').trim().isLength({ min: 1, max: 200 }).withMessage('Search query required'),
 ];
 
-module.exports = { validate, registerRules, loginRules, productRules, reviewRules, searchRules };
+module.exports = { validate, registerRules, loginRules, userProfileRules, passwordRules, productRules, reviewRules, searchRules };

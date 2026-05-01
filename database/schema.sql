@@ -122,7 +122,7 @@ SELECT setval(pg_get_serial_sequence('categories', 'id'), (SELECT MAX(id) FROM c
 -- Seed a default admin user (password: admin123 — bcrypt hash)
 -- You should change this in production
 INSERT INTO users (username, email, password_hash, first_name, last_name)
-VALUES ('admin', 'admin@shop.local', '$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW', 'Admin', 'User');
+VALUES ('admin', 'admin@shop.local', '$2b$10$2QKcLpxD0BTRpZnybQpqa.0xo3V2Rf0Ak0AMjE45Qap.Glv80hJTm', 'Admin', 'User');
 
 INSERT INTO user_roles (user_id, role) VALUES (1, 'admin');
 

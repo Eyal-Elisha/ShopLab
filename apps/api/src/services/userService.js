@@ -27,6 +27,24 @@ async function findById(id) {
   return result.rows[0] || null;
 }
 
+async function findAuthById(id) {
+  const sql = 'SELECT id, password_hash FROM users WHERE id = $1';
+  const result = await query(sql, [id]);
+  return result.rows[0] || null;
+}
+
+async function findByUsernameExceptId(username, userId) {
+  const sql = 'SELECT id FROM users WHERE username = $1 AND id <> $2';
+  const result = await query(sql, [username, userId]);
+  return result.rows[0] || null;
+}
+
+async function findByEmailExceptId(email, userId) {
+  const sql = 'SELECT id FROM users WHERE email = $1 AND id <> $2';
+  const result = await query(sql, [email, userId]);
+  return result.rows[0] || null;
+}
+
 async function createUser({ username, email, password, firstName, lastName }) {
   const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
   const sql = `INSERT INTO users (username, email, password_hash, first_name, last_name)
@@ -86,4 +104,40 @@ async function updateProfile(userId, { firstName, lastName }) {
   );
 }
 
-module.exports = { findByUsername, findByEmail, findById, createUser, verifyPassword, getAllUsers, updateUserRole, updateProfile };
+async function updateOwnProfile(userId, { username, email }) {
+  const result = await query(
+    `UPDATE users
+     SET username = $1, email = $2, updated_at = NOW()
+     WHERE id = $3
+     RETURNING id, username, email, first_name, last_name, created_at`,
+    [username, email, userId]
+  );
+
+  return result.rows[0] || null;
+}
+
+async function updatePassword(userId, password) {
+  const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+  const result = await query(
+    'UPDATE users SET password_hash = $1, updated_at = NOW() WHERE id = $2 RETURNING id',
+    [passwordHash, userId]
+  );
+
+  return result.rows[0] || null;
+}
+
+module.exports = {
+  findByUsername,
+  findByEmail,
+  findById,
+  findAuthById,
+  findByUsernameExceptId,
+  findByEmailExceptId,
+  createUser,
+  verifyPassword,
+  getAllUsers,
+  updateUserRole,
+  updateProfile,
+  updateOwnProfile,
+  updatePassword,
+};
