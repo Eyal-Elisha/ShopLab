@@ -2,7 +2,7 @@ const router = require('express').Router();
 const productCtrl = require('../controllers/productController');
 const reviewCtrl = require('../controllers/reviewController');
 const { authenticate, requireRole } = require('../middleware/auth');
-const { productRules, reviewRules, searchRules, validate } = require('../middleware/validation');
+const { productRules, productPatchRules, reviewRules, searchRules, validate } = require('../middleware/validation');
 
 // Public
 router.get('/', productCtrl.list);
@@ -17,7 +17,7 @@ router.delete('/reviews/:id', authenticate, reviewCtrl.deleteReview);
 
 // Admin only
 router.post('/', authenticate, requireRole('admin'), productRules, validate, productCtrl.create);
-router.put('/:id', authenticate, requireRole('admin'), productRules, validate, productCtrl.update);
+router.put('/:id', authenticate, productPatchRules, validate, productCtrl.update);
 router.delete('/:id', authenticate, requireRole('admin'), productCtrl.remove);
 
 module.exports = router;

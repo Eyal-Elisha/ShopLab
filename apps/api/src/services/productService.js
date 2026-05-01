@@ -69,6 +69,11 @@ async function getCategories() {
   return result.rows;
 }
 
+async function getAllIds() {
+  const result = await query('SELECT id FROM products ORDER BY id ASC');
+  return result.rows.map((row) => row.id);
+}
+
 const SEED_CATEGORIES = [
   { id: 1, name: 'Electronics', slug: 'electronics', description: 'Gadgets, devices, and tech accessories' },
   { id: 2, name: 'Bags', slug: 'bags', description: 'Backpacks, totes, and carry essentials' },
@@ -123,7 +128,6 @@ async function ensureSeed() {
          SET name = EXCLUDED.name,
              description = EXCLUDED.description,
              price = EXCLUDED.price,
-             stock = EXCLUDED.stock,
              category_id = EXCLUDED.category_id,
              image_url = EXCLUDED.image_url,
              updated_at = NOW()`,
@@ -158,4 +162,4 @@ async function ensureSeed() {
   }
 }
 
-module.exports = { getAll, getById, search, create, update, remove, getCategories, ensureSeed };
+module.exports = { getAll, getById, search, create, update, remove, getCategories, getAllIds, ensureSeed };

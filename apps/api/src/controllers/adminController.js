@@ -1,6 +1,8 @@
 const userService = require('../services/userService');
 const orderService = require('../services/orderService');
 const productService = require('../services/productService');
+const adminProductService = require('../services/adminProductService');
+const adminUserService = require('../services/adminUserService');
 
 async function index(req, res) {
   res.json({
@@ -32,6 +34,33 @@ async function updateUserRole(req, res, next) {
   } catch (err) { next(err); }
 }
 
+async function updateProduct(req, res, next) {
+  try {
+    const product = await adminProductService.updateProduct(req.params.productId, req.body);
+    if (!product) return res.status(404).json({ error: 'Product not found' });
+    res.json({ product });
+  } catch (err) { next(err); }
+}
+
+async function deleteProduct(req, res, next) {
+  try {
+    const deleted = await adminProductService.deleteProduct(req.params.productId);
+    if (!deleted) return res.status(404).json({ error: 'Product not found' });
+    res.json({ message: 'Product deleted' });
+  } catch (err) { next(err); }
+}
+
+async function deleteUser(req, res, next) {
+  try {
+    if (Number(req.params.userId) === req.user.id) {
+      return res.status(400).json({ error: 'Admins cannot delete their own account' });
+    }
+    const deleted = await adminUserService.deleteUser(req.params.userId);
+    if (!deleted) return res.status(404).json({ error: 'User not found' });
+    res.json({ message: 'User deleted' });
+  } catch (err) { next(err); }
+}
+
 async function getFlag(req, res) {
   res.json({
     flag: 'SHOPLAB{phantom_ch3ckout_br0ken_acc3ss_ctrl}',
@@ -39,4 +68,4 @@ async function getFlag(req, res) {
   });
 }
 
-module.exports = { index, dashboard, updateUserRole, getFlag };
+module.exports = { index, dashboard, updateUserRole, updateProduct, deleteProduct, deleteUser, getFlag };
