@@ -11,13 +11,14 @@ function formatMoney(value: number | string) {
 
 export default function Orders() {
   const { user } = useAuth();
-  if (!user) return <Navigate to="/login" />;
-
+  const userId = user?.id;
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!userId) return;
+
     api.getOrders()
       .then((response) => {
         setOrders(response.orders);
@@ -29,7 +30,9 @@ export default function Orders() {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [userId]);
+
+  if (!user) return <Navigate to="/login" />;
 
   return (
     <div className="container mx-auto px-4 py-8">

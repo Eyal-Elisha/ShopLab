@@ -20,6 +20,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const handleLogout = async () => {
+    setMobileMenuOpen(false);
+    await logout();
+    navigate("/login", { replace: true });
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <header className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-md">
@@ -79,8 +85,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </Button>
                 </Link>
                 <div className="flex items-center gap-2 ml-2 pl-2 border-l">
-                  <span className="text-sm text-muted-foreground">{user.username}</span>
-                  <Button variant="ghost" size="icon" onClick={logout}>
+                  <Link to="/profile" className="text-sm text-muted-foreground hover:text-foreground">
+                    {user.username}
+                  </Link>
+                  <Button variant="ghost" size="icon" onClick={handleLogout}>
                     <LogOut className="w-4 h-4" />
                   </Button>
                 </div>
@@ -116,9 +124,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             {user ? (
               <>
                 <Link to="/orders" onClick={() => setMobileMenuOpen(false)} className="block py-2">Orders</Link>
+                <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="block py-2">Profile</Link>
                 <Link to="/cart" onClick={() => setMobileMenuOpen(false)} className="block py-2">Cart ({totalItems})</Link>
                 {isAdmin && <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-primary">Admin</Link>}
-                <Button variant="outline" className="w-full" onClick={() => { logout(); setMobileMenuOpen(false); }}>Logout</Button>
+                <Button variant="outline" className="w-full" onClick={handleLogout}>Logout</Button>
               </>
             ) : (
               <Link to="/login" onClick={() => setMobileMenuOpen(false)}><Button className="w-full">Sign In</Button></Link>

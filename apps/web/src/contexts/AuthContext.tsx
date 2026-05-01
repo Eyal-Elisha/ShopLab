@@ -3,9 +3,10 @@ import { api, extractApiError, type AuthUser } from "@/lib/api";
 
 interface AuthContextType {
   user: AuthUser | null;
+  setUser: (user: AuthUser | null) => void;
   login: (username: string, password: string) => Promise<{ success: boolean; message: string }>;
   register: (username: string, email: string, password: string) => Promise<{ success: boolean; message: string }>;
-  logout: () => void;
+  logout: () => Promise<void>;
   isAdmin: boolean;
   isReady: boolean;
 }
@@ -47,13 +48,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const logout = () => {
-    api.logout().catch(() => undefined);
+  const logout = async () => {
     setUser(null);
+    await api.logout().catch(() => undefined);
   };
 
   const value = useMemo(() => ({
     user,
+    setUser,
     login,
     register,
     logout,
