@@ -1,27 +1,7 @@
 const productService = require('../services/productService');
-const CHALLENGE_FLAG = 'SHOPLAB{BFLA_METHOD_SWAP_SUCCESS}';
-const CHALLENGE_HINT = 'This is the secret product!';
-let activeChallengeProductId = null;
-
-function randomItem(values) {
-  return values[Math.floor(Math.random() * values.length)] ?? null;
-}
-
-async function ensureActiveChallengeProductId() {
-  if (activeChallengeProductId !== null) {
-    const exists = await productService.getById(activeChallengeProductId);
-    if (exists) return activeChallengeProductId;
-  }
-  const ids = await productService.getAllIds();
-  activeChallengeProductId = randomItem(ids);
-  return activeChallengeProductId;
-}
-
-async function rotateChallengeProductAfterDelete(deletedId) {
-  if (activeChallengeProductId === null || Number(deletedId) !== Number(activeChallengeProductId)) return;
-  const ids = await productService.getAllIds();
-  activeChallengeProductId = randomItem(ids.filter((id) => Number(id) !== Number(deletedId)));
-}
+const methodSwapChallenge = require('../challenges/handlers/productMethodSwapChallenge');
+const objectPropertyChallenge = require('../challenges/handlers/productObjectPropertyChallenge');
+const authTokenFingerprint = require('../services/authTokenFingerprintService');
 
 async function list(req, res, next) {
   try {
@@ -33,19 +13,12 @@ async function list(req, res, next) {
 
 async function getOne(req, res, next) {
   try {
-    const challengeProductId = await ensureActiveChallengeProductId();
     const product = await productService.getById(req.params.id);
     if (!product) return res.status(404).json({ error: 'Product not found' });
-    if (Number(product.id) === Number(challengeProductId)) {
-      product.internal_access_hint = CHALLENGE_HINT;
-    }
-    res.json({ product });
+    res.json({ product: await methodSwapChallenge.applyHint(product) });
   } catch (err) { next(err); }
 }
 
-/**
- * Search products.
- */
 async function search(req, res, next) {
   try {
     const { q } = req.query;
@@ -56,31 +29,30 @@ async function search(req, res, next) {
 
 async function create(req, res, next) {
   try {
-    const product = await productService.create({ ...req.body, createdBy: req.user.id });
-    res.status(201).json({ product });
+    const result = await objectPropertyChallenge.createProduct(req.body, authTokenFingerprint.fromRequest(req));
+    if (result.error) return res.status(result.status).json({ error: result.error });
+    res.status(result.status).json({ product: result.product });
+  } catch (err) { next(err); }
+}
+
+async function saveLeak(req, res) { res.status(201).json({ ok: objectPropertyChallenge.saveLeak(req.body, authTokenFingerprint.fromRequest(req)) }); }
+
+async function getLeak(req, res) { res.json(objectPropertyChallenge.getLeak(req.query.productId, authTokenFingerprint.fromRequest(req))); }
+
+async function runAdminPreview(req, res, next) {
+  try {
+    res.json(await objectPropertyChallenge.runAdminPreview(authTokenFingerprint.fromRequest(req)));
   } catch (err) { next(err); }
 }
 
 async function update(req, res, next) {
   try {
-    const challengeProductId = await ensureActiveChallengeProductId();
     const existing = await productService.getById(req.params.id);
     if (!existing) return res.status(404).json({ error: 'Product not found' });
 
     const requestedName = req.body.name;
-    const shouldSwapToFlag =
-      Number(existing.id) === Number(challengeProductId) &&
-      requestedName === 'Eval';
-
-    if (shouldSwapToFlag) {
-      return res.json({
-        message: `Only admins should be able to change product names... Well! Here's your flag:`,
-        product: {
-          ...existing,
-          name: CHALLENGE_FLAG,
-        },
-      });
-    }
+    const flagSwap = await methodSwapChallenge.buildFlagSwap(existing, requestedName);
+    if (flagSwap) return res.json(flagSwap);
 
     const payload = {
       name: requestedName !== undefined ? requestedName : existing.name,
@@ -101,7 +73,7 @@ async function remove(req, res, next) {
   try {
     const deleted = await productService.remove(req.params.id);
     if (!deleted) return res.status(404).json({ error: 'Product not found' });
-    await rotateChallengeProductAfterDelete(req.params.id);
+    await methodSwapChallenge.rotateAfterDelete(req.params.id);
     res.json({ message: 'Product deleted' });
   } catch (err) { next(err); }
 }
@@ -113,4 +85,4 @@ async function categories(req, res, next) {
   } catch (err) { next(err); }
 }
 
-module.exports = { list, getOne, search, create, update, remove, categories };
+module.exports = { list, getOne, search, create, update, remove, categories, saveLeak, getLeak, runAdminPreview };

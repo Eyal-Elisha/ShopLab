@@ -3,6 +3,7 @@ const orderService = require('../services/orderService');
 const productService = require('../services/productService');
 const adminProductService = require('../services/adminProductService');
 const adminUserService = require('../services/adminUserService');
+const objectPropertyChallenge = require('../challenges/handlers/productObjectPropertyChallenge');
 
 async function index(req, res) {
   res.json({
@@ -75,6 +76,13 @@ async function getBrokenAuthFlag(req, res) {
   });
 }
 
+async function getObjectPropertyFlag(req, res) {
+  res.json({
+    flag: objectPropertyChallenge.FLAG,
+    message: 'Admin-only product preview data recovered. Submit this flag on the Challenges page.',
+  });
+}
+
 module.exports = {
   index,
   dashboard,
@@ -84,4 +92,5 @@ module.exports = {
   deleteUser,
   getFlag,
   getBrokenAuthFlag,
+  getObjectPropertyFlag,
 };
