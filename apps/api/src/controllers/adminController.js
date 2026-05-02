@@ -68,4 +68,20 @@ async function getFlag(req, res) {
   });
 }
 
-module.exports = { index, dashboard, updateUserRole, updateProduct, deleteProduct, deleteUser, getFlag };
+async function getBrokenAuthFlag(req, res) {
+  res.json({
+    flag: 'SHOPLAB{remember_me_is_not_auth}',
+    message: 'Legacy remembered identity accepted. Submit this flag on the Challenges page.',
+  });
+}
+
+module.exports = {
+  index,
+  dashboard,
+  updateUserRole,
+  updateProduct,
+  deleteProduct,
+  deleteUser,
+  getFlag,
+  getBrokenAuthFlag,
+};

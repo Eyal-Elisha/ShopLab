@@ -23,6 +23,7 @@ const registerRules = [
 const loginRules = [
   body('username').trim().notEmpty().withMessage('Username required'),
   body('password').notEmpty().withMessage('Password required'),
+  body('rememberMe').optional().isBoolean().withMessage('Remember me must be true or false'),
 ];
 
 const userProfileRules = [
