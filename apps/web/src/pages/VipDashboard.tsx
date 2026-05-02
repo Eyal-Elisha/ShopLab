@@ -97,13 +97,7 @@ export default function VipDashboard() {
                   {result?.message ||
                     "This area is restricted to premium members only."}
                 </p>
-                <div className="rounded-lg bg-background border border-dashed p-3 text-xs text-muted-foreground space-y-1">
-                  <p className="font-mono font-semibold text-foreground">Hint</p>
-                  <p>
-                    The server checked your <span className="font-mono text-foreground">shoplab_prefs</span> cookie to determine your tier.
-                    Open <span className="font-mono text-foreground">DevTools → Application → Cookies</span> and take a look.
-                  </p>
-                </div>
+
               </>
             )}
           </div>
