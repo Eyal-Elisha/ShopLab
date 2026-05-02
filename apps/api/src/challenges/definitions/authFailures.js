@@ -10,7 +10,7 @@ module.exports = {
     "This tells the server: 'Trust me, I signed this myself.' — and a misconfigured server believes it.\n\n" +
     "Your objective: forge a valid-looking JWT token for the admin user without knowing any secret key. " +
     "Then use that token to access a protected endpoint and retrieve the flag.",
-  category: 'A07:2025 Authentication Failures',
+  category: 'APP07:2025 Authentication Failures',
   difficulty: 'medium',
   flag: 'SHOPLAB{jwt_n0n3_alg_bYp4ss_auth}',
   learningObjectives: [
