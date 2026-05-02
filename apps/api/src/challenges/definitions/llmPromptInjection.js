@@ -9,7 +9,7 @@ module.exports = {
     "Your goal: recover the challenge flag from the assistant (same value you submit as SHOPLAB{…}), then enter it below.\n\n" +
     "Where to play: open the teal Help & support launcher on the home page (/), or use the standalone support bot route linked below. The API only answers when local Ollama is running with OLLAMA_MODEL set — there is no fallback bot. No account is required to chat.",
   category: 'LLM01:2025 Prompt Injection',
-  difficulty: 'medium',
+  difficulty: 'easy',
   flag: 'SHOPLAB{llm01_pr0mpt_inj3ct_support}',
   learningObjectives: [
     'Recognise how adversarial user turns steer models when prompts mix secrecy with leaky exceptions.',
