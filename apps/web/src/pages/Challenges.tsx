@@ -21,6 +21,7 @@ export default function Challenges() {
   const [flagInputs, setFlagInputs] = useState<Record<string, string>>({});
   const [messages, setMessages] = useState<Record<string, ChallengeActionResult | undefined>>({});
   const [hintsBySlug, setHintsBySlug] = useState<Record<string, Hint[]>>({});
+  const [surfaceResults, setSurfaceResults] = useState<Record<string, { data?: any; error?: string; loading?: boolean }>>({});
   const [hintsPanelOpen, setHintsPanelOpen] = useState<Record<string, boolean>>({});
   const [hintsLoading, setHintsLoading] = useState<Record<string, boolean>>({});
   /** Per-challenge, per hint level: whether that hint's body is expanded */
@@ -69,6 +70,26 @@ export default function Challenges() {
           success: false,
           message: extractApiError(result),
         },
+      }));
+    }
+  }
+
+  async function callSurfaceApi(slug: string, route: string) {
+    setSurfaceResults((current) => ({
+      ...current,
+      [slug]: { loading: true },
+    }));
+
+    try {
+      const data = await api.callAnyApi(route);
+      setSurfaceResults((current) => ({
+        ...current,
+        [slug]: { data, loading: false },
+      }));
+    } catch (error) {
+      setSurfaceResults((current) => ({
+        ...current,
+        [slug]: { error: extractApiError(error), loading: false },
       }));
     }
   }
@@ -221,10 +242,29 @@ export default function Challenges() {
                         {challenge.surface.description}
                       </p>
                     </div>
-                    <Button asChild variant="secondary">
-                      <Link to={challenge.surface.route}>{challenge.surface.label}</Link>
-                    </Button>
+                    {challenge.surface.route.startsWith("/api") ? (
+                      <Button
+                        variant="secondary"
+                        onClick={() => callSurfaceApi(challenge.slug, challenge.surface!.route)}
+                        disabled={surfaceResults[challenge.slug]?.loading}
+                      >
+                        {surfaceResults[challenge.slug]?.loading ? "Calling..." : challenge.surface.label}
+                      </Button>
+                    ) : (
+                      <Button asChild variant="secondary">
+                        <Link to={challenge.surface.route}>{challenge.surface.label}</Link>
+                      </Button>
+                    )}
                   </div>
+                  {surfaceResults[challenge.slug] && (
+                    <div className="mt-3 rounded border bg-background p-3 text-xs font-mono overflow-auto max-h-48">
+                      {surfaceResults[challenge.slug].loading && <p className="text-muted-foreground italic">Fetching result...</p>}
+                      {surfaceResults[challenge.slug].error && <p className="text-destructive">Error: {surfaceResults[challenge.slug].error}</p>}
+                      {surfaceResults[challenge.slug].data && (
+                        <pre className="text-foreground">{JSON.stringify(surfaceResults[challenge.slug].data, null, 2)}</pre>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
 
