@@ -9,7 +9,7 @@ module.exports = {
     "This allows a malicious user to break out of the intended query structure and execute their own SQL commands. " +
     "\n\n" +
     "Your objective: Use a UNION-based SQL injection to exfiltrate the flag from the `system_settings` table.",
-  category: 'A05:2025 Injection',
+  category: 'APP:05:2025 Injection',
   difficulty: 'medium',
   flag: 'SHOPLAB{h1dd3n_d4t4_un10n_str1k3s}',
   learningObjectives: [
