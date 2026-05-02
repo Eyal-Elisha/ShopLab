@@ -72,4 +72,21 @@ async function logout(req, res) {
   res.json({ success: true });
 }
 
-module.exports = { register, login, getProfile, logout };
+async function getJwtFlag(req, res) {
+  // If the user bypassed signature verification using alg:none, they are halfway there.
+  // We strictly require the forged token to also claim the 'admin' role.
+  if (!req.user || req.user.role !== 'admin') {
+    return res.status(403).json({
+      error: 'Insufficient permissions',
+      message: 'You managed to authenticate, but only an admin can see this flag. Try forging your role too.'
+    });
+  }
+
+  res.json({
+    flag: 'SHOPLAB{jwt_n0n3_alg_bYp4ss_auth}',
+    message: "Welcome, ghost. You forged your way in and claimed the throne. That's a complete JWT compromise.",
+    user: req.user,
+  });
+}
+
+module.exports = { register, login, getProfile, logout, getJwtFlag };

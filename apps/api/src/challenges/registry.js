@@ -5,6 +5,7 @@ const llmPromptInjectionDef = require('./definitions/llmPromptInjection');
 const rememberMeBrokenAuthDef = require('./definitions/rememberMeBrokenAuth');
 const sqlInjectionDef = require('./definitions/sqlInjection');
 const insecureDesignDef = require('./definitions/insecureDesign');
+const authFailuresDef = require('./definitions/authFailures');
 
 /**
  * Register challenges here.
@@ -17,6 +18,7 @@ const registeredChallenges = [
   { definition: rememberMeBrokenAuthDef },
   { definition: sqlInjectionDef },
   { definition: insecureDesignDef },
+  { definition: authFailuresDef },
 ];
 
 const definitions = registeredChallenges.map((entry) => entry.definition);
