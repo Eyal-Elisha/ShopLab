@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /admin
+Disallow: /db.config.bak
 
 # TODO(sre): prune these before GA — left in for QA testing
 Disallow: /api/admin
