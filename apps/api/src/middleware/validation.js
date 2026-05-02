@@ -46,7 +46,7 @@ const productRules = [
   body('name').trim().isLength({ min: 1, max: 255 }).withMessage('Product name required'),
   body('description').optional().trim().isLength({ max: 5000 }),
   body('price').isFloat({ min: 0 }).withMessage('Valid price required'),
-  body('stock').isInt({ min: 0 }).withMessage('Valid stock required'),
+  body('stock').optional().isInt({ min: 0 }).withMessage('Valid stock required'),
   body('categoryId').optional().isInt(),
 ];
 

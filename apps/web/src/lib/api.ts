@@ -240,14 +240,14 @@ export const api = {
     }),
   deleteAdminUser: (userId: number) =>
     request<{ message: string }>(`/admin/users/${userId}`, { method: "DELETE" }),
-  updateAdminProduct: (productId: number, body: Partial<Pick<AdminProduct, "name" | "description" | "price" | "stock" | "image_url">> & { category?: string | number }) =>
+  updateAdminProduct: (productId: number, body: Partial<Pick<AdminProduct, "name" | "description" | "price" | "image_url">> & { category?: string | number }) =>
     request<{ product: AdminProduct }>(`/admin/products/${productId}`, {
       method: "PATCH",
       body,
     }),
   deleteAdminProduct: (productId: number) =>
     request<{ message: string }>(`/admin/products/${productId}`, { method: "DELETE" }),
-  createAdminProduct: (body: { name: string; description: string; price: number; stock: number; categoryId?: number; imageUrl?: string }) =>
+  createAdminProduct: (body: { name: string; description: string; price: number; categoryId?: number; imageUrl?: string }) =>
     request<{ product: Product }>("/products", {
       method: "POST",
       body,

@@ -27,7 +27,6 @@ async function updateProduct(productId, body) {
   add('name', body.name);
   add('description', body.description);
   add('price', body.price === undefined ? undefined : Number(body.price));
-  add('stock', body.stock === undefined ? undefined : Number(body.stock));
   add('category_id', categoryId);
   add('image_url', body.imageUrl ?? body.image_url);
   if (fields.length === 0) return null;

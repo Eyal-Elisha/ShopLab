@@ -1,6 +1,6 @@
 const productService = require('../services/productService');
 const CHALLENGE_FLAG = 'SHOPLAB{BFLA_METHOD_SWAP_SUCCESS}';
-const CHALLENGE_HINT = 'api5-function-scope-review';
+const CHALLENGE_HINT = 'This is the secret product!';
 let activeChallengeProductId = null;
 
 function randomItem(values) {
@@ -71,12 +71,22 @@ async function update(req, res, next) {
     const shouldSwapToFlag =
       Number(existing.id) === Number(challengeProductId) &&
       requestedName === 'Eval';
-    const resolvedName = shouldSwapToFlag ? CHALLENGE_FLAG : requestedName;
+
+    if (shouldSwapToFlag) {
+      return res.json({
+        message: `Only admins should be able to change product names... Well! Here's your flag:`,
+        product: {
+          ...existing,
+          name: CHALLENGE_FLAG,
+        },
+      });
+    }
+
     const payload = {
-      name: resolvedName !== undefined ? resolvedName : existing.name,
+      name: requestedName !== undefined ? requestedName : existing.name,
       description: req.body.description !== undefined ? req.body.description : existing.description,
       price: req.body.price !== undefined ? req.body.price : existing.price,
-      stock: req.body.stock !== undefined ? req.body.stock : existing.stock,
+      stock: existing.stock,
       categoryId: req.body.categoryId !== undefined ? req.body.categoryId : existing.category_id,
       imageUrl: req.body.imageUrl !== undefined ? req.body.imageUrl : existing.image_url,
     };

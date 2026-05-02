@@ -13,13 +13,13 @@ const categoryValue = (p: AdminProduct) => String(p.category_id ?? p.category_na
 export default function ProductEditDialog({ product, open, onOpenChange, onSaved }: Props) {
   const [name, setName] = useState(""); const [description, setDescription] = useState("");
   const [category, setCategory] = useState(""); const [categories, setCategories] = useState<ProductCategory[]>([]);
-  const [price, setPrice] = useState(""); const [stock, setStock] = useState(""); const [imageUrl, setImageUrl] = useState("");
+  const [price, setPrice] = useState(""); const [imageUrl, setImageUrl] = useState("");
   const [saving, setSaving] = useState(false); const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!product) return;
     setName(product.name); setDescription(product.description || ""); setCategory(categoryValue(product));
-    setPrice(String(product.price)); setStock(String(product.stock)); setImageUrl(product.image_url || ""); setError(null);
+    setPrice(String(product.price)); setImageUrl(product.image_url || ""); setError(null);
   }, [product]);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function ProductEditDialog({ product, open, onOpenChange, onSaved
     setSaving(true); setError(null);
     try {
       await api.updateAdminProduct(product.id, {
-        name: name.trim(), description, category: category.trim(), price: Number(price), stock: Number(stock), image_url: imageUrl.trim(),
+        name: name.trim(), description, category: category.trim(), price: Number(price), image_url: imageUrl.trim(),
       });
       await onSaved(); onOpenChange(false);
     } catch (err) { setError(extractApiError(err)); } finally { setSaving(false); }
@@ -48,7 +48,6 @@ export default function ProductEditDialog({ product, open, onOpenChange, onSaved
           <div className="space-y-2"><Label htmlFor="admin-product-name">Name</Label><Input id="admin-product-name" value={name} onChange={(e) => setName(e.target.value)} disabled={saving} /></div>
           <div className="space-y-2"><Label htmlFor="admin-product-price">Price</Label><Input id="admin-product-price" type="number" min="0" step="0.01" value={price} onChange={(e) => setPrice(e.target.value)} disabled={saving} /></div>
           <div className="space-y-2"><Label htmlFor="admin-product-category">Category</Label><Select value={category} onValueChange={setCategory} disabled={saving}><SelectTrigger id="admin-product-category"><SelectValue placeholder="Select category" /></SelectTrigger><SelectContent>{categories.map((c) => <SelectItem key={c.id} value={String(c.id)}>{c.name}</SelectItem>)}</SelectContent></Select></div>
-          <div className="space-y-2"><Label htmlFor="admin-product-stock">Stock</Label><Input id="admin-product-stock" type="number" min="0" step="1" value={stock} onChange={(e) => setStock(e.target.value)} disabled={saving} /></div>
           <div className="space-y-2"><Label htmlFor="admin-product-image">Image URL</Label><Input id="admin-product-image" type="url" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://example.com/image.jpg" disabled={saving} /></div>
           <div className="space-y-2"><Label htmlFor="admin-product-description">Description</Label><Textarea id="admin-product-description" value={description} onChange={(e) => setDescription(e.target.value)} disabled={saving} /></div>
           <DialogFooter><Button type="submit" disabled={saving}>{saving ? "Saving..." : "Save"}</Button></DialogFooter>

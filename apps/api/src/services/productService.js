@@ -43,11 +43,16 @@ async function search(searchTerm) {
   return result.rows;
 }
 
+function randomDisplayStock() {
+  return Math.floor(Math.random() * 96) + 5;
+}
+
 async function create({ name, description, price, stock, categoryId, imageUrl, createdBy }) {
+  const displayStock = stock === undefined ? randomDisplayStock() : stock;
   const sql = `INSERT INTO products (name, description, price, stock, category_id, image_url, created_by)
                VALUES ($1, $2, $3, $4, $5, $6, $7)
                RETURNING *`;
-  const result = await query(sql, [name, description, price, stock, categoryId, imageUrl, createdBy]);
+  const result = await query(sql, [name, description, price, displayStock, categoryId, imageUrl, createdBy]);
   return result.rows[0];
 }
 

@@ -67,15 +67,6 @@ async function create(userId, shippingAddress, cartItems) {
     const order = orderResult.rows[0];
 
     for (const item of cartItems) {
-      const stockResult = await client.query(
-        'UPDATE products SET stock = stock - $1, updated_at = NOW() WHERE id = $2 AND stock >= $1 RETURNING stock',
-        [item.quantity, item.product_id]
-      );
-      if (stockResult.rowCount === 0) {
-        const error = new Error(`Product ${item.product_id} is out of stock.`);
-        error.status = 400;
-        throw error;
-      }
       await client.query(
         'INSERT INTO order_items (order_id, product_id, quantity, price_at_time) VALUES ($1, $2, $3, $4)',
         [order.id, item.product_id, item.quantity, item.price]
