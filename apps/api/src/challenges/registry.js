@@ -8,6 +8,7 @@ const sqlInjectionDef = require('./definitions/sqlInjection');
 const insecureDesignDef = require('./definitions/insecureDesign');
 const authFailuresDef = require('./definitions/authFailures');
 const integrityFailuresDef = require('./definitions/integrityFailures');
+const securityMisconfigDef = require('./definitions/securityMisconfig');
 
 /**
  * Register challenges here.
@@ -23,6 +24,7 @@ const registeredChallenges = [
   { definition: insecureDesignDef },
   { definition: authFailuresDef },
   { definition: integrityFailuresDef },
+  { definition: securityMisconfigDef },
 ];
 
 const definitions = registeredChallenges.map((entry) => entry.definition);
