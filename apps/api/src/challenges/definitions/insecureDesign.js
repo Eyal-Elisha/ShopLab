@@ -8,7 +8,7 @@ module.exports = {
     "In ShopLab, the cart might fetch prices securely, but there's an old override logic in the checkout API endpoint that was never removed. " +
     "Your objective is to intercept the checkout process and manually specify a custom price for an expensive item.\n\n" +
     "Successfully purchase an item that originally costs more than $200 for $1 or less, and the system will reward you with a flag in the receipt response.",
-  category: 'A06:2025 Insecure Design',
+  category: 'APP06:2025 Insecure Design',
   difficulty: 'easy',
   flag: 'SHOPLAB{pr1c3_t4g_sw4p_ins3cur3_d3sign}',
   learningObjectives: [
