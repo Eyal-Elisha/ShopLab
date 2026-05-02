@@ -178,21 +178,23 @@ export default function Challenges() {
         {challenges.map((challenge) => (
           <Card key={challenge.id} className={challenge.solved ? "opacity-80" : ""}>
             <CardHeader className="space-y-3">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div className="space-y-1">
+              <div className="space-y-2">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                   <CardTitle className="text-xl">
                     {challenge.solved ? "Solved" : "Open"}: {challenge.name}
                   </CardTitle>
+                  <div className="flex gap-2 sm:justify-end sm:self-start">
+                    <Badge className={`${difficultyClasses[challenge.difficulty]} whitespace-nowrap`}>
+                      {challenge.difficulty}
+                    </Badge>
+                    <Badge variant="secondary" className="whitespace-nowrap">{challenge.category}</Badge>
+                  </div>
+                </div>
+                <div className="space-y-1">
                   {challenge.summary && (
                     <p className="text-sm font-medium text-foreground/80">{challenge.summary}</p>
                   )}
                   <CardDescription>{challenge.description}</CardDescription>
-                </div>
-                <div className="flex gap-2">
-                  <Badge className={difficultyClasses[challenge.difficulty]}>
-                    {challenge.difficulty}
-                  </Badge>
-                  <Badge variant="secondary">{challenge.category}</Badge>
                 </div>
               </div>
               {challenge.learningObjectives && challenge.learningObjectives.length > 0 && (

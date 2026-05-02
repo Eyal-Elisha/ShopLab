@@ -16,6 +16,7 @@ import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
+import AdminCreateProduct from "./pages/AdminCreateProduct";
 import Challenges from "./pages/Challenges";
 import SupportBot from "./pages/SupportBot";
 import NotFound from "./pages/NotFound";
@@ -42,6 +43,7 @@ const App = () => (
                 <Route path="/orders" element={<Orders />} />
                 <Route path="/profile/:userId" element={<Profile />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="/admin/products/new" element={<AdminCreateProduct />} />
                 <Route path="/challenges" element={<Challenges />} />
                 <Route path="/support-bot" element={<SupportBot />} />
                 <Route path="*" element={<NotFound />} />

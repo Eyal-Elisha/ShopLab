@@ -108,9 +108,29 @@ export interface AdminOrder {
 export interface AdminProduct {
   id: number;
   name: string;
+  description?: string | null;
   price: number | string;
   stock: number;
+  image_url?: string | null;
+  category_id?: number | null;
   category_name?: string | null;
+}
+
+export interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number | string;
+  stock: number;
+  category_id?: number | null;
+  category_name?: string | null;
+  image_url?: string | null;
+}
+
+export interface ProductCategory {
+  id: number;
+  name: string;
+  slug: string;
 }
 
 export interface AdminDashboard {
@@ -201,6 +221,10 @@ export const api = {
       method: "POST",
       body,
     }),
+  getProducts: () => request<{ products: Product[] }>("/products"),
+  getProduct: (productId: number) => request<{ product: Product }>(`/products/${productId}`),
+  getProductCategories: () => request<{ categories: ProductCategory[] }>("/products/categories"),
+  searchProducts: (q: string) => request<{ products: Product[]; query: string }>(`/products/search?q=${encodeURIComponent(q)}`),
   getProductReviews: (productId: number) =>
     request<{ reviews: ProductReview[] }>(`/products/${productId}/reviews`),
   createProductReview: (productId: number, body: { rating: number; comment: string }) =>
@@ -213,6 +237,20 @@ export const api = {
     request<{ user: { user_id: number; role: "user" | "admin" } }>(`/admin/users/${userId}/role`, {
       method: "PUT",
       body: { role },
+    }),
+  deleteAdminUser: (userId: number) =>
+    request<{ message: string }>(`/admin/users/${userId}`, { method: "DELETE" }),
+  updateAdminProduct: (productId: number, body: Partial<Pick<AdminProduct, "name" | "description" | "price" | "image_url">> & { category?: string | number }) =>
+    request<{ product: AdminProduct }>(`/admin/products/${productId}`, {
+      method: "PATCH",
+      body,
+    }),
+  deleteAdminProduct: (productId: number) =>
+    request<{ message: string }>(`/admin/products/${productId}`, { method: "DELETE" }),
+  createAdminProduct: (body: { name: string; description: string; price: number; categoryId?: number; imageUrl?: string }) =>
+    request<{ product: Product }>("/products", {
+      method: "POST",
+      body,
     }),
   getChallenges: () => request<{ challenges: Challenge[] }>("/challenges"),
   solveChallenge: (slug: string, flag: string) =>

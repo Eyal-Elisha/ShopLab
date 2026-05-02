@@ -43,11 +43,16 @@ async function search(searchTerm) {
   return result.rows;
 }
 
+function randomDisplayStock() {
+  return Math.floor(Math.random() * 96) + 5;
+}
+
 async function create({ name, description, price, stock, categoryId, imageUrl, createdBy }) {
+  const displayStock = stock === undefined ? randomDisplayStock() : stock;
   const sql = `INSERT INTO products (name, description, price, stock, category_id, image_url, created_by)
                VALUES ($1, $2, $3, $4, $5, $6, $7)
                RETURNING *`;
-  const result = await query(sql, [name, description, price, stock, categoryId, imageUrl, createdBy]);
+  const result = await query(sql, [name, description, price, displayStock, categoryId, imageUrl, createdBy]);
   return result.rows[0];
 }
 
@@ -67,6 +72,11 @@ async function remove(id) {
 async function getCategories() {
   const result = await query('SELECT * FROM categories ORDER BY name');
   return result.rows;
+}
+
+async function getAllIds() {
+  const result = await query('SELECT id FROM products ORDER BY id ASC');
+  return result.rows.map((row) => row.id);
 }
 
 const SEED_CATEGORIES = [
@@ -123,7 +133,6 @@ async function ensureSeed() {
          SET name = EXCLUDED.name,
              description = EXCLUDED.description,
              price = EXCLUDED.price,
-             stock = EXCLUDED.stock,
              category_id = EXCLUDED.category_id,
              image_url = EXCLUDED.image_url,
              updated_at = NOW()`,
@@ -158,4 +167,4 @@ async function ensureSeed() {
   }
 }
 
-module.exports = { getAll, getById, search, create, update, remove, getCategories, ensureSeed };
+module.exports = { getAll, getById, search, create, update, remove, getCategories, getAllIds, ensureSeed };

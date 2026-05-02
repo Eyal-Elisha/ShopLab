@@ -69,7 +69,7 @@ app.get('/api', (req, res) => {
       cart:       ['GET /api/cart', 'POST /api/cart/add', 'DELETE /api/cart/:itemId'],
       account:    ['PATCH /api/account/settings'],
       coupons:    ['POST /api/coupons/apply'],
-      admin:      ['GET /api/admin/dashboard', 'PUT /api/admin/users/:userId/role', 'GET /api/admin/flag'],
+      admin:      ['GET /api/admin/dashboard', 'PUT /api/admin/users/:userId/role', 'DELETE /api/admin/users/:userId', 'PATCH /api/admin/products/:productId', 'DELETE /api/admin/products/:productId', 'GET /api/admin/flag'],
       challenges: ['GET /api/challenges', 'POST /api/challenges/solve', 'GET /api/hints/:slug'],
       supportChat: ['POST /api/support-chat'],
       health:     ['GET /api/health'],
