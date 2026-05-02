@@ -12,6 +12,7 @@ This project ships two running modes:
 - Node.js 18+
 - PostgreSQL 14+ running locally (or reachable via `DB_HOST`)
 - `npm`
+- **[Ollama](https://ollama.com)** — only if you use the Help & support widget / LLM challenge. Put **`OLLAMA_MODEL=llama3.2`** (or matching tag) in **`apps/api/.env`** after **`ollama pull llama3.2`**. See **§10** below.
 
 ---
 
@@ -164,3 +165,39 @@ Then re-seed the staff-notes order if you want it back:
 SELECT id FROM orders WHERE staff_notes IS NOT NULL LIMIT 1;
 -- if empty, restart the API once; ensureTables() will reinsert it.
 ```
+
+---
+
+## 10. Ollama (support chat / LLM challenge)
+
+The support chat API talks to **only** Ollama. In **`apps/api/.env`** set **`OLLAMA_MODEL`** — this repo assumes **`llama3.2`** after `ollama pull llama3.2` (whatever `ollama list` prints must match).
+
+- **`OLLAMA_MODEL`** — typically `llama3.2` here; adjust if you pulled a different tag.
+- Optional overrides (omit to use defaults): `OLLAMA_BASE_URL` defaults to `http://127.0.0.1:11434`, `OLLAMA_TIMEOUT_MS` defaults to `120000` (ms).
+
+The challenge flag string is baked into code (same source as **Challenges**); it is **not** set via `.env`. Learners retrieve it indirectly (prompt injection vs. model behavior).
+
+### Start Ollama
+
+- **Windows / macOS:** install the Ollama app and open it once. It runs a background service that listens on port **11434**. You can quit from the tray/menu bar and reopen later the same way.
+- **Linux / headless:** run `ollama serve` in a terminal and leave it running.
+
+### Pull a model (once per model name)
+
+```bash
+ollama pull llama3.2
+```
+
+Use the same name in `OLLAMA_MODEL` as shown by `ollama list`.
+
+### Check that it responds
+
+```bash
+ollama run llama3.2 "Say hi in one sentence."
+```
+
+Or: open `http://127.0.0.1:11434` in a browser — you should get `Ollama is running`.
+
+Restart the ShopLab API after changing `.env`. If the chat errors with **503**, `OLLAMA_MODEL` is missing; if **502**, Ollama is not running, the model is not pulled, or the URL is wrong.
+
+If each reply feels slow (**10–30 s on CPU-only** is common): the API sends `keep_alive` and caps decode length / context (`OLLAMA_KEEP_ALIVE`, `OLLAMA_NUM_PREDICT`, `OLLAMA_NUM_CTX` in `.env`). Use an NVIDIA GPU (Ollama must see CUDA on Windows), or pull a smaller tag such as **`llama3.2:3b`**, send one warm‑up prompt after restarting Ollama, and close RAM-heavy apps.

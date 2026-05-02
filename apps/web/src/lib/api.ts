@@ -259,4 +259,12 @@ export const api = {
       body: { slug, flag },
     }),
   getHints: (slug: string) => request<{ hints: Hint[] }>(`/hints/${slug}`),
+  sendSupportConciergeMessage: (
+    message: string,
+    history: Array<{ role: "user" | "assistant"; content: string }> = [],
+  ) =>
+    request<{ reply: string }>("/support-chat", {
+      method: "POST",
+      body: { message, history },
+    }),
 };

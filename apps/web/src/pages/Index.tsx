@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Search, Shield, ArrowRight, Star } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { SupportChatDock } from "@/components/SupportChatWidget";
 import { api, type Product } from "@/lib/api";
 import { toProductView } from "@/lib/productView";
 
@@ -65,6 +66,8 @@ export default function Index() {
           ))}
         </div>
       </section>
+
+      <SupportChatDock />
     </div>
   );
 }

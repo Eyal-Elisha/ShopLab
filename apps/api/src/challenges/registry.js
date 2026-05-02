@@ -1,6 +1,7 @@
 const brokenAccessControlDef = require('./definitions/brokenAccessControl');
 const profileBolaDef = require('./definitions/profileBola');
 const bflaEvalDef = require('./definitions/bflaEval');
+const llmPromptInjectionDef = require('./definitions/llmPromptInjection');
 
 /**
  * Register challenges here.
@@ -9,6 +10,7 @@ const registeredChallenges = [
   { definition: brokenAccessControlDef },
   { definition: profileBolaDef },
   { definition: bflaEvalDef },
+  { definition: llmPromptInjectionDef },
 ];
 
 const definitions = registeredChallenges.map((entry) => entry.definition);
