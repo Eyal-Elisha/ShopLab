@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +11,7 @@ import { Package } from "lucide-react";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { login } = useAuth();
@@ -20,7 +22,7 @@ export default function Login() {
     setError("");
     if (!username || !password) { setError("All fields are required"); return; }
     setIsSubmitting(true);
-    const result = await login(username, password);
+    const result = await login(username, password, rememberMe);
     setIsSubmitting(false);
     if (result.success) navigate("/");
     else setError(result.message);
@@ -46,6 +48,10 @@ export default function Login() {
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox id="rememberMe" checked={rememberMe} onCheckedChange={(checked) => setRememberMe(checked === true)} />
+              <Label htmlFor="rememberMe" className="text-sm font-normal">Remember me</Label>
             </div>
           </CardContent>
           <CardFooter className="flex-col gap-3">

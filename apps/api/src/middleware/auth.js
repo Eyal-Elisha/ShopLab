@@ -1,48 +1,50 @@
-// ============================================================
-// Authentication & Authorization Middleware
-// ============================================================
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 const userService = require('../services/userService');
+const { REMEMBER_COOKIE_NAME, parseRememberToken } = require('../services/rememberTokenService');
 const AUTH_COOKIE_NAME = 'shoplab_auth';
 
-function getTokenFromRequest(req) {
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    return authHeader.split(' ')[1];
-  }
-
+function getCookies(req) {
   const cookieHeader = req.headers.cookie;
-  if (!cookieHeader) {
-    return null;
-  }
+  if (!cookieHeader) return {};
 
-  const cookies = Object.fromEntries(
+  return Object.fromEntries(
     cookieHeader
       .split(';')
       .map((entry) => entry.trim())
       .filter(Boolean)
       .map((entry) => {
         const separatorIndex = entry.indexOf('=');
-        if (separatorIndex === -1) {
-          return [entry, ''];
-        }
-
+        if (separatorIndex === -1) return [entry, ''];
         const name = entry.slice(0, separatorIndex);
         const value = entry.slice(separatorIndex + 1);
         return [name, decodeURIComponent(value)];
       })
   );
-
-  return cookies[AUTH_COOKIE_NAME] || null;
 }
 
-/**
- * Verify JWT token and attach user to request.
- */
+function getJwtFromRequest(req) {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return authHeader.split(' ')[1];
+  }
+
+  return getCookies(req)[AUTH_COOKIE_NAME] || null;
+}
+
+function getRememberedUserFromRequest(req) {
+  return parseRememberToken(getCookies(req)[REMEMBER_COOKIE_NAME]);
+}
+
 function authenticate(req, res, next) {
-  const token = getTokenFromRequest(req);
+  const token = getJwtFromRequest(req);
   if (!token) {
+    const rememberedUser = getRememberedUserFromRequest(req);
+    if (rememberedUser) {
+      req.user = rememberedUser;
+      return next();
+    }
+
     return res.status(401).json({ error: 'Authentication required' });
   }
   try {
@@ -55,8 +57,9 @@ function authenticate(req, res, next) {
 }
 
 function maybeAuthenticate(req, res, next) {
-  const token = getTokenFromRequest(req);
+  const token = getJwtFromRequest(req);
   if (!token) {
+    req.user = getRememberedUserFromRequest(req);
     return next();
   }
   try {
@@ -69,9 +72,6 @@ function maybeAuthenticate(req, res, next) {
   next();
 }
 
-/**
- * Require a specific role.
- */
 function requireRole(role) {
   return async (req, res, next) => {
     if (!req.user) {

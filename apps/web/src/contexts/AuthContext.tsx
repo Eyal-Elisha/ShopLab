@@ -4,7 +4,7 @@ import { api, extractApiError, type AuthUser } from "@/lib/api";
 interface AuthContextType {
   user: AuthUser | null;
   setUser: (user: AuthUser | null) => void;
-  login: (username: string, password: string) => Promise<{ success: boolean; message: string }>;
+  login: (username: string, password: string, rememberMe?: boolean) => Promise<{ success: boolean; message: string }>;
   register: (username: string, email: string, password: string) => Promise<{ success: boolean; message: string }>;
   logout: () => Promise<void>;
   isAdmin: boolean;
@@ -28,9 +28,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .finally(() => setIsReady(true));
   }, []);
 
-  const login = async (username: string, password: string) => {
+  const login = async (username: string, password: string, rememberMe = false) => {
     try {
-      const response = await api.login({ username, password });
+      const payload = { username, password, rememberMe };
+      const response = await api.login(payload);
       setUser(response.user);
       return { success: true, message: "Login successful" };
     } catch (error) {

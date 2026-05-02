@@ -10,5 +10,6 @@ router.delete('/users/:userId', authenticate, requireRole('admin'), adminCtrl.de
 router.patch('/products/:productId', authenticate, requireRole('admin'), adminProductPatchRules, validate, adminCtrl.updateProduct);
 router.delete('/products/:productId', authenticate, requireRole('admin'), adminCtrl.deleteProduct);
 router.get('/flag', authenticate, requireRole('admin'), adminCtrl.getFlag);
+router.get('/broken-auth-flag', authenticate, requireRole('admin'), adminCtrl.getBrokenAuthFlag);
 
 module.exports = router;

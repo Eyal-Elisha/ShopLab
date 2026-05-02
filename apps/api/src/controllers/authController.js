@@ -1,27 +1,12 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 const userService = require('../services/userService');
-const { AUTH_COOKIE_NAME } = require('../middleware/auth');
-
-function getAuthCookieOptions() {
-  return {
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: config.server.env === 'production',
-    path: '/',
-    maxAge: 24 * 60 * 60 * 1000,
-  };
-}
-
-function setAuthCookie(res, token) {
-  res.cookie(AUTH_COOKIE_NAME, token, getAuthCookieOptions());
-}
+const { setAuthCookie, setRememberCookie, clearAuthCookies } = require('../services/authCookieService');
 
 async function register(req, res, next) {
   try {
     const { username, email, password, firstName, lastName } = req.body;
 
-    // Check if user exists
     const existingUser = await userService.findByUsername(username);
     if (existingUser) {
       return res.status(409).json({ error: 'Username already taken' });
@@ -44,7 +29,7 @@ async function register(req, res, next) {
 
 async function login(req, res, next) {
   try {
-    const { username, password } = req.body;
+    const { username, password, rememberMe } = req.body;
 
     const user = await userService.findByUsername(username);
     if (!user) {
@@ -62,6 +47,7 @@ async function login(req, res, next) {
       { expiresIn: config.jwt.expiresIn }
     );
     setAuthCookie(res, token);
+    if (rememberMe) setRememberCookie(res, user);
 
     res.json({
       user: { id: user.id, username: user.username, email: user.email, role: user.role, first_name: user.first_name, last_name: user.last_name },
@@ -82,12 +68,7 @@ async function getProfile(req, res, next) {
 }
 
 async function logout(req, res) {
-  res.clearCookie(AUTH_COOKIE_NAME, {
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: config.server.env === 'production',
-    path: '/',
-  });
+  clearAuthCookies(res);
   res.json({ success: true });
 }
 
