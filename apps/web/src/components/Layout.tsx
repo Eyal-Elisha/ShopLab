@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
-import { ShoppingCart, User, LogOut, Shield, Search, Menu, X, Package, Bug } from "lucide-react";
+import { ShoppingCart, User, LogOut, Shield, Search, Menu, X, Package, Bug, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -59,6 +59,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     </Button>
                   </Link>
                 )}
+                <Link to="/vip">
+                  <Button variant="ghost" size="sm" className="text-yellow-600 dark:text-yellow-400">
+                    <Crown className="w-4 h-4 mr-1" /> VIP
+                  </Button>
+                </Link>
                 <Link to="/cart" className="relative">
                   <Button variant="ghost" size="icon">
                     <ShoppingCart className="w-5 h-5" />
@@ -103,6 +108,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <Link to={`/profile/${user.id}`} onClick={() => setMobileMenuOpen(false)} className="block py-2">Profile</Link>
                 <Link to="/cart" onClick={() => setMobileMenuOpen(false)} className="block py-2">Cart ({totalItems})</Link>
                 {isAdmin && <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-primary">Admin</Link>}
+                <Link to="/vip" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-yellow-600 dark:text-yellow-400">VIP Dashboard</Link>
                 <Button variant="outline" className="w-full" onClick={handleLogout}>Logout</Button>
               </>
             ) : (

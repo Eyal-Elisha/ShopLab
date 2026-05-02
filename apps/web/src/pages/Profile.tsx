@@ -4,6 +4,7 @@ import { api, extractApiError, type AuthUser } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import ProfileDetailsForm from "@/components/profile/ProfileDetailsForm";
 import PasswordForm from "@/components/profile/PasswordForm";
+import PreferencesForm from "@/components/profile/PreferencesForm";
 
 export default function Profile() {
   const { userId: routeUserId = "" } = useParams();
@@ -58,6 +59,7 @@ export default function Profile() {
               loading={loading}
               onUpdated={handleProfileUpdated}
             />
+            <PreferencesForm />
             <PasswordForm loading={loading} />
           </>
         ) : (
