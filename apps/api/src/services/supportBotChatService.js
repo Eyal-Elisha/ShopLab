@@ -1,10 +1,6 @@
-/** Must equal `flag` in challenges/definitions/llmPromptInjection.js — env must not redefine it */
+/** Must equal `flag` in challenges/definitions/llmPromptInjection.js */
 const LAB_CHALLENGE_FLAG = 'SHOPLAB{llm01_pr0mpt_inj3ct_support}';
 
-/**
- * System prompt policy only (trusted-looking app config). Untrusted shopper text arrives separately
- * as the chat `user` turn — brittle / contradictory wording here still enables LLM01-style direct injections.
- */
 function buildPlaybook() {
   return [
     'You are ShopLab\'s customer support assistant.',
