@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import { CartProvider } from "@/contexts/CartContext";
 import Layout from "@/components/Layout";
 import Index from "./pages/Index";
@@ -18,39 +19,43 @@ import Admin from "./pages/Admin";
 import AdminCreateProduct from "./pages/AdminCreateProduct";
 import Challenges from "./pages/Challenges";
 import SupportBot from "./pages/SupportBot";
+import VipDashboard from "./pages/VipDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <CartProvider>
-            <Layout>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/products/:id" element={<ProductDetail />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/orders" element={<Orders />} />
-                <Route path="/profile/:userId" element={<Profile />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/admin/products/new" element={<AdminCreateProduct />} />
-                <Route path="/challenges" element={<Challenges />} />
-                <Route path="/support-bot" element={<SupportBot />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Layout>
-          </CartProvider>
-        </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
+    <ThemeProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AuthProvider>
+            <CartProvider>
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/products" element={<Products />} />
+                  <Route path="/products/:id" element={<ProductDetail />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/orders" element={<Orders />} />
+                  <Route path="/profile/:userId" element={<Profile />} />
+                  <Route path="/admin" element={<Admin />} />
+                  <Route path="/admin/products/new" element={<AdminCreateProduct />} />
+                  <Route path="/challenges" element={<Challenges />} />
+                  <Route path="/support-bot" element={<SupportBot />} />
+                  <Route path="/vip" element={<VipDashboard />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Layout>
+            </CartProvider>
+          </AuthProvider>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

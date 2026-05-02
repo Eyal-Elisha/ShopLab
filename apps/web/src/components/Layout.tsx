@@ -1,13 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
-import { ShoppingCart, User, LogOut, Shield, Search, Menu, X, Package, Bug } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
+import { ShoppingCart, User, LogOut, Shield, Search, Menu, X, Package, Bug, Crown, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout, isAdmin } = useAuth();
   const { totalItems } = useCart();
+  const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -59,6 +61,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     </Button>
                   </Link>
                 )}
+                <Link to="/vip">
+                  <Button variant="ghost" size="sm" className="text-yellow-600 dark:text-yellow-400">
+                    <Crown className="w-4 h-4 mr-1" /> VIP
+                  </Button>
+                </Link>
                 <Link to="/cart" className="relative">
                   <Button variant="ghost" size="icon">
                     <ShoppingCart className="w-5 h-5" />
@@ -70,6 +77,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </Button>
                 </Link>
                 <div className="flex items-center gap-2 ml-2 pl-2 border-l">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                    title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                  >
+                    {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                  </Button>
                   <Link to={`/profile/${user.id}`} className="text-sm text-muted-foreground hover:text-foreground">
                     {user.username}
                   </Link>
@@ -103,6 +118,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <Link to={`/profile/${user.id}`} onClick={() => setMobileMenuOpen(false)} className="block py-2">Profile</Link>
                 <Link to="/cart" onClick={() => setMobileMenuOpen(false)} className="block py-2">Cart ({totalItems})</Link>
                 {isAdmin && <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-primary">Admin</Link>}
+                <Link to="/vip" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-yellow-600 dark:text-yellow-400">VIP Dashboard</Link>
+                <button
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className="block py-2 text-sm text-muted-foreground hover:text-foreground"
+                >
+                  {theme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode"}
+                </button>
                 <Button variant="outline" className="w-full" onClick={handleLogout}>Logout</Button>
               </>
             ) : (

@@ -7,6 +7,7 @@ const boplaDef = require('./definitions/bopla');
 const sqlInjectionDef = require('./definitions/sqlInjection');
 const insecureDesignDef = require('./definitions/insecureDesign');
 const authFailuresDef = require('./definitions/authFailures');
+const integrityFailuresDef = require('./definitions/integrityFailures');
 
 /**
  * Register challenges here.
@@ -21,6 +22,7 @@ const registeredChallenges = [
   { definition: sqlInjectionDef },
   { definition: insecureDesignDef },
   { definition: authFailuresDef },
+  { definition: integrityFailuresDef },
 ];
 
 const definitions = registeredChallenges.map((entry) => entry.definition);
