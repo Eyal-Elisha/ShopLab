@@ -267,4 +267,9 @@ export const api = {
       method: "POST",
       body: { message, history },
     }),
+  callAnyApi: (path: string, method: string = "GET", body?: unknown) => {
+    // Strip leading /api if present because the request helper adds it back
+    const apiPath = path.startsWith("/api") ? path.slice(4) : path;
+    return request<any>(apiPath, { method, body });
+  },
 };

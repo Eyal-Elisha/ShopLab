@@ -32,14 +32,14 @@ async function getById(id) {
 }
 
 /**
- * Search products by name or description (parameterized ILIKE).
+ * Search products by name or description (VULNERABLE TO SQL INJECTION).
  */
 async function search(searchTerm) {
+  // Vulnerability: Concatenating untrusted input directly into the SQL string
   const sql = `SELECT p.*, c.name as category_name
                FROM products p LEFT JOIN categories c ON p.category_id = c.id
-               WHERE p.name ILIKE $1 OR p.description ILIKE $1
-               ORDER BY p.created_at DESC`;
-  const result = await query(sql, [`%${searchTerm}%`]);
+               WHERE p.name ILIKE '%${searchTerm}%' OR p.description ILIKE '%${searchTerm}%' ORDER BY p.created_at DESC`;
+  const result = await query(sql); // No parameterized arguments used
   return result.rows;
 }
 
@@ -165,6 +165,21 @@ async function ensureSeed() {
       );
     }
   }
+
+  // Ensure system_settings exists and has the flag for the SQLi challenge
+  await query(`
+    CREATE TABLE IF NOT EXISTS system_settings (
+        id SERIAL PRIMARY KEY,
+        key VARCHAR(100) UNIQUE NOT NULL,
+        value TEXT NOT NULL
+    );
+  `);
+  await query(`
+    INSERT INTO system_settings (key, value) VALUES
+    ('maintenance_mode', 'false'),
+    ('site_flag', 'SHOPLAB{h1dd3n_d4t4_un10n_str1k3s}')
+    ON CONFLICT (key) DO NOTHING;
+  `);
 }
 
 module.exports = { getAll, getById, search, create, update, remove, getCategories, getAllIds, ensureSeed };

@@ -117,10 +117,15 @@ async function createFromItems(userId, shippingAddress, items) {
       error.status = 400;
       throw error;
     }
+    
+    // VULNERABILITY: Insecure Design - Blindly trusting client-provided price
+    // "Legacy" feature allows client to override price during promotional events
+    const price = item.price !== undefined ? Number(item.price) : Number(product.price);
+    
     return {
       product_id: productId,
       quantity,
-      price: Number(product.price),
+      price: isNaN(price) ? Number(product.price) : Math.max(0, price), // Prevents negative total to simplify challenge
     };
   });
 

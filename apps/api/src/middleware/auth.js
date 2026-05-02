@@ -48,10 +48,27 @@ function authenticate(req, res, next) {
     return res.status(401).json({ error: 'Authentication required' });
   }
   try {
+    // Primary verify — requires a valid signature
     const decoded = jwt.verify(token, config.jwt.secret);
     req.user = decoded;
-    next();
+    return next();
   } catch (err) {
+    // VULNERABILITY: A07:2025 Authentication Failures — JWT None Algorithm
+    // Legacy debugging mode: if the token header declares alg 'none' and the
+    // server is not configured to reject it, jwt.decode still parses the payload.
+    // A developer left this fallback in to allow unsigned tokens during local
+    // testing and never removed it before going to production.
+    try {
+      const decoded = jwt.decode(token);
+      const headerB64 = token.split('.')[0];
+      const header = JSON.parse(Buffer.from(headerB64, 'base64').toString('utf8'));
+      if (decoded && header && header.alg && header.alg.toLowerCase() === 'none') {
+        req.user = decoded;
+        return next();
+      }
+    } catch (_) {
+      // ignore decode errors
+    }
     return res.status(401).json({ error: 'Invalid or expired token' });
   }
 }
@@ -66,7 +83,19 @@ function maybeAuthenticate(req, res, next) {
     const decoded = jwt.verify(token, config.jwt.secret);
     req.user = decoded;
   } catch (err) {
-    req.user = null;
+    // Same none-algorithm fallback as authenticate()
+    try {
+      const decoded = jwt.decode(token);
+      const headerB64 = token.split('.')[0];
+      const header = JSON.parse(Buffer.from(headerB64, 'base64').toString('utf8'));
+      if (decoded && header && header.alg && header.alg.toLowerCase() === 'none') {
+        req.user = decoded;
+      } else {
+        req.user = null;
+      }
+    } catch (_) {
+      req.user = null;
+    }
   }
 
   next();
