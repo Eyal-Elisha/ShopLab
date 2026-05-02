@@ -1,38 +1,73 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Star } from "lucide-react";
+import { ShoppingCart, Star, Search, AlertCircle } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
-import { api, extractApiError, type Product } from "@/lib/api";
-import { toProductView } from "@/lib/productView";
+import { useQuery } from "@tanstack/react-query";
+
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  category_name?: string;
+  image_url?: string;
+  rating?: number;
+  flag_value?: string;
+  value?: string;
+}
 
 export default function Products() {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const { addItem } = useCart();
 
-  useEffect(() => {
-    api.getProducts()
-      .then((response) => {
-        setProducts(response.products || []);
-        setError(null);
-      })
-      .catch((err) => setError(extractApiError(err)))
-      .finally(() => setLoading(false));
-  }, []);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["products", searchQuery],
+    queryFn: async () => {
+      const url = searchQuery 
+        ? `/api/products/search?q=${encodeURIComponent(searchQuery)}`
+        : `/api/products`;
+        
+      const res = await fetch(url);
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "An error occurred");
+      }
+      const data = await res.json();
+      return Array.isArray(data) ? data : (data?.products || []);
+    },
+    retry: false
+  });
 
-  const productViews = products.map(toProductView);
-  const categories = useMemo(() => ["All", ...new Set(productViews.map((p) => p.category))], [productViews]);
-  const filtered = selectedCategory === "All" ? productViews : productViews.filter((p) => p.category === selectedCategory);
+  const products: Product[] = data || [];
+  
+  // Extract categories dynamically
+  const categories = ["All", ...new Set(products.map((p) => p.category_name || "Unknown"))].filter(Boolean);
+
+  const filtered = selectedCategory === "All" 
+    ? products 
+    : products.filter((p) => (p.category_name || "Unknown") === selectedCategory);
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="font-display text-3xl font-bold mb-2">Products</h1>
-      <p className="text-muted-foreground mb-6">Browse our catalog of {productViews.length} products</p>
-      {loading && <p className="text-sm text-muted-foreground mb-6">Loading products...</p>}
-      {error && <p className="text-sm text-destructive mb-6">{error}</p>}
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+        <div>
+          <h1 className="font-display text-3xl font-bold mb-2">Products</h1>
+          <p className="text-muted-foreground">Browse our catalog of {products.length} products</p>
+        </div>
+        
+        <div className="relative w-full md:max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2.5 rounded-lg border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          />
+        </div>
+      </div>
 
       <div className="flex flex-wrap gap-2 mb-8">
         {categories.map((cat) => (
@@ -42,32 +77,57 @@ export default function Products() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filtered.map((product) => (
-          <Link key={product.id} to={`/products/${product.id}`} className="group">
-            <div className="rounded-xl border bg-card overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
-              <div className="aspect-square overflow-hidden bg-secondary/30">
-                <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
-              </div>
-              <div className="p-4">
-                <p className="text-xs text-muted-foreground mb-1">{product.category}</p>
-                <h3 className="font-display font-semibold truncate">{product.name}</h3>
-                <div className="flex items-center gap-1 mt-1 mb-3">
-                  <Star className="w-3.5 h-3.5 fill-primary text-primary" />
-                  <span className="text-sm text-muted-foreground">{product.rating}</span>
-                  <span className="text-xs text-muted-foreground">Stock: {product.stock}</span>
+      {error && (
+        <div className="bg-destructive/10 border border-destructive text-destructive px-4 py-3 rounded-lg mb-6 flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 mt-0.5 shrink-0" />
+          <div>
+            <h3 className="font-semibold">Query Error</h3>
+            <p className="text-sm font-mono mt-1">{error instanceof Error ? error.message : String(error)}</p>
+          </div>
+        </div>
+      )}
+
+      {isLoading && (
+        <div className="flex justify-center py-12">
+          <div className="w-8 h-8 rounded-full border-4 border-primary/30 border-t-primary animate-spin"></div>
+        </div>
+      )}
+
+      {!isLoading && !error && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filtered.map((product) => (
+            <Link key={product.id} to={`/products/${product.id}`} className="group">
+              <div className="rounded-xl border bg-card overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
+                <div className="aspect-square overflow-hidden bg-secondary/30">
+                  <img src={product.image_url} alt={product.name || product.value} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="font-display font-bold text-lg">${product.price.toFixed(2)}</span>
-                  <Button size="sm" variant="secondary" disabled={product.stock <= 0} onClick={(e) => { e.preventDefault(); addItem(product.id); }}>
-                    <ShoppingCart className="w-4 h-4" />
-                  </Button>
+                <div className="p-4">
+                  <p className="text-xs text-muted-foreground mb-1">{product.category_name || "Unknown"}</p>
+                  <h3 className="font-display font-semibold truncate">{product.name || product.value || "Unknown Product"}</h3>
+                  <div className="flex items-center gap-1 mt-1 mb-3">
+                    <Star className="w-3.5 h-3.5 fill-primary text-primary" />
+                    <span className="text-sm text-muted-foreground">{product.rating || 5}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-display font-bold text-lg">${Number(product.price || 0).toFixed(2)}</span>
+                    <Button size="sm" variant="secondary" onClick={(e) => { e.preventDefault(); addItem(product.id); }}>
+                      <ShoppingCart className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {!isLoading && !error && filtered.length === 0 && (
+        <div className="text-center py-16">
+          <Search className="w-12 h-12 text-muted mx-auto mb-4" />
+          <p className="text-lg font-display font-semibold mb-2">No products found</p>
+          <p className="text-muted-foreground">Try different keywords or select another category</p>
+        </div>
+      )}
     </div>
   );
 }
