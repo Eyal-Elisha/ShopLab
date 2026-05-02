@@ -2,12 +2,12 @@ module.exports = {
   slug: 'jwt-none',
   name: 'Operation: Ghost Identity',
   summary:
-    "ShopLab's token verification has a skeleton in its closet. Authentication can be bypassed entirely — no password needed. Can you become someone you're not?",
+    "ShopLab's token verification has a skeleton in its closet. Authentication can be bypassed entirely - no password needed. Can you become someone you're not?",
   description:
     "JSON Web Tokens are the backbone of ShopLab's authentication. Every request you make after logging in carries a signed JWT that the server trusts. " +
     "But what happens when the server forgets to enforce the signature?\n\n" +
     "A common Authentication Failure is accepting a JWT with its algorithm set to 'none'. " +
-    "This tells the server: 'Trust me, I signed this myself.' — and a misconfigured server believes it.\n\n" +
+    "This tells the server: 'Trust me, I signed this myself.' - and a misconfigured server believes it.\n\n" +
     "Your objective: forge a valid-looking JWT token for the admin user without knowing any secret key. " +
     "Then use that token to access a protected endpoint and retrieve the flag.",
   category: 'APP07:2025 Authentication Failures',
@@ -22,7 +22,7 @@ module.exports = {
   hints: [
     {
       level: 1,
-      hint: "Every request you make after login includes a token. Copy one from your browser's DevTools and paste it into a JWT decoder — what are its three parts?",
+      hint: "Every request you make after login includes a token. Copy one from your browser's DevTools and paste it into a JWT decoder - what are its three parts?",
     },
     {
       level: 2,
@@ -34,7 +34,7 @@ module.exports = {
     },
     {
       level: 4,
-      hint: "A JWT is just three Base64URL-encoded JSON strings joined by dots. You can craft one entirely by hand — or use an online tool. The payload should claim to be the admin user. The key is knowing which field in the header to change.",
+      hint: "A JWT is just three Base64URL-encoded JSON strings joined by dots. You can craft one entirely by hand - or use an online tool. The payload should claim to be the admin user. The key is knowing which field in the header to change.",
     },
     {
       level: 5,
