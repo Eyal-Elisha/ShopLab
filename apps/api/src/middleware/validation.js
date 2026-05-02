@@ -46,7 +46,26 @@ const productRules = [
   body('name').trim().isLength({ min: 1, max: 255 }).withMessage('Product name required'),
   body('description').optional().trim().isLength({ max: 5000 }),
   body('price').isFloat({ min: 0 }).withMessage('Valid price required'),
-  body('stock').isInt({ min: 0 }).withMessage('Valid stock required'),
+  body('stock').optional().isInt({ min: 0 }).withMessage('Valid stock required'),
+  body('categoryId').optional().isInt(),
+];
+
+const productPatchRules = [
+  body('name').optional().trim().isLength({ min: 1, max: 255 }).withMessage('Product name required'),
+  body('description').optional().trim().isLength({ max: 5000 }),
+  body('price').optional().isFloat({ min: 0 }).withMessage('Valid price required'),
+  body('stock').optional().isInt({ min: 0 }).withMessage('Valid stock required'),
+  body('categoryId').optional().isInt(),
+  body('imageUrl').optional().trim().isURL().withMessage('Valid image URL required'),
+];
+
+const adminProductPatchRules = [
+  body('name').optional().trim().isLength({ min: 1, max: 255 }).withMessage('Product name required'),
+  body('description').optional().trim().isLength({ max: 5000 }),
+  body('price').optional().isFloat({ min: 0 }).withMessage('Valid price required'),
+  body('stock').optional().isInt({ min: 0 }).withMessage('Valid stock required'),
+  body('image_url').optional().trim().isURL().withMessage('Valid image URL required'),
+  body('category').optional(),
   body('categoryId').optional().isInt(),
 ];
 
@@ -60,4 +79,15 @@ const searchRules = [
   query('q').trim().isLength({ min: 1, max: 200 }).withMessage('Search query required'),
 ];
 
-module.exports = { validate, registerRules, loginRules, userProfileRules, passwordRules, productRules, reviewRules, searchRules };
+module.exports = {
+  validate,
+  registerRules,
+  loginRules,
+  userProfileRules,
+  passwordRules,
+  productRules,
+  productPatchRules,
+  adminProductPatchRules,
+  reviewRules,
+  searchRules,
+};

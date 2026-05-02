@@ -1,4 +1,4 @@
-const { query } = require('./db');
+const { query, pool } = require('./db');
 
 const ORDER_ITEMS_JSON = `COALESCE(
   json_agg(
@@ -57,23 +57,31 @@ async function create(userId, shippingAddress, cartItems) {
     total += Number(item.price) * Number(item.quantity);
   }
 
-  const orderResult = await query(
-    'INSERT INTO orders (user_id, total, shipping_address) VALUES ($1, $2, $3) RETURNING *',
-    [userId, total, shippingAddress]
-  );
-  const order = orderResult.rows[0];
-
-  for (const item of cartItems) {
-    await query(
-      'INSERT INTO order_items (order_id, product_id, quantity, price_at_time) VALUES ($1, $2, $3, $4)',
-      [order.id, item.product_id, item.quantity, item.price]
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const orderResult = await client.query(
+      'INSERT INTO orders (user_id, total, shipping_address) VALUES ($1, $2, $3) RETURNING *',
+      [userId, total, shippingAddress]
     );
-    await query('UPDATE products SET stock = stock - $1 WHERE id = $2', [item.quantity, item.product_id]);
+    const order = orderResult.rows[0];
+
+    for (const item of cartItems) {
+      await client.query(
+        'INSERT INTO order_items (order_id, product_id, quantity, price_at_time) VALUES ($1, $2, $3, $4)',
+        [order.id, item.product_id, item.quantity, item.price]
+      );
+    }
+
+    await client.query('DELETE FROM cart_items WHERE user_id = $1', [userId]);
+    await client.query('COMMIT');
+    return order;
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
   }
-
-  await query('DELETE FROM cart_items WHERE user_id = $1', [userId]);
-
-  return order;
 }
 
 /**

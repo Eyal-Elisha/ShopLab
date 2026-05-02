@@ -1,16 +1,23 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { mockProducts } from "@/data/mockData";
 import { ShoppingCart, Search, Shield, ArrowRight, Star } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { api, type Product } from "@/lib/api";
+import { toProductView } from "@/lib/productView";
 
 export default function Index() {
   const { addItem } = useCart();
-  const featured = mockProducts.slice(0, 4);
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    api.getProducts().then((response) => setProducts(response.products || [])).catch(() => setProducts([]));
+  }, []);
+
+  const featured = products.slice(0, 4).map(toProductView);
 
   return (
     <div>
-      {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-accent py-20 md:py-32">
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-2xl">
@@ -18,42 +25,24 @@ export default function Index() {
               <Shield className="w-4 h-4" /> Course Base Template
             </span>
             <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-6">
-              Build modern security labs<br />
-              <span className="text-primary">inside a realistic storefront.</span>
+              Build modern security labs<br /><span className="text-primary">inside a realistic storefront.</span>
             </h1>
             <p className="text-lg text-muted-foreground mb-8 max-w-lg">
-              ShopLab is an e-commerce security training template for OWASP-style web and API exercises. Includes a built-in Broken Access Control lab with IDOR, missing auth, and privilege escalation stages.
+              ShopLab is an e-commerce security training template for OWASP-style web and API exercises.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link to="/products">
-                <Button size="lg" className="gap-2">
-                  Browse Products <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
-              <Link to="/challenges">
-                <Button size="lg" variant="secondary" className="gap-2">
-                  <Shield className="w-4 h-4" /> Try Challenges
-                </Button>
-              </Link>
-              <Link to="/search?q=">
-                <Button size="lg" variant="outline" className="gap-2">
-                  <Search className="w-4 h-4" /> Search
-                </Button>
-              </Link>
+              <Link to="/products"><Button size="lg" className="gap-2">Browse Products <ArrowRight className="w-4 h-4" /></Button></Link>
+              <Link to="/challenges"><Button size="lg" variant="secondary" className="gap-2"><Shield className="w-4 h-4" /> Try Challenges</Button></Link>
+              <Link to="/search?q="><Button size="lg" variant="outline" className="gap-2"><Search className="w-4 h-4" /> Search</Button></Link>
             </div>
           </div>
         </div>
-        <div className="absolute top-10 right-10 w-72 h-72 rounded-full bg-primary/5 blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-accent/30 blur-3xl" />
       </section>
 
-      {/* Featured Products */}
       <section className="container mx-auto px-4 py-16">
         <div className="flex items-center justify-between mb-8">
           <h2 className="font-display text-2xl font-bold">Featured Products</h2>
-          <Link to="/products" className="text-primary text-sm font-medium hover:underline flex items-center gap-1">
-            View all <ArrowRight className="w-3 h-3" />
-          </Link>
+          <Link to="/products" className="text-primary text-sm font-medium hover:underline flex items-center gap-1">View all <ArrowRight className="w-3 h-3" /></Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {featured.map((product) => (
@@ -65,15 +54,10 @@ export default function Index() {
                 <div className="p-4">
                   <p className="text-xs text-muted-foreground mb-1">{product.category}</p>
                   <h3 className="font-display font-semibold truncate">{product.name}</h3>
-                  <div className="flex items-center gap-1 mt-1 mb-3">
-                    <Star className="w-3.5 h-3.5 fill-primary text-primary" />
-                    <span className="text-sm text-muted-foreground">{product.rating}</span>
-                  </div>
+                  <div className="flex items-center gap-1 mt-1 mb-3"><Star className="w-3.5 h-3.5 fill-primary text-primary" /><span className="text-sm text-muted-foreground">{product.rating}</span></div>
                   <div className="flex items-center justify-between">
                     <span className="font-display font-bold text-lg">${product.price.toFixed(2)}</span>
-                    <Button size="sm" variant="secondary" onClick={(e) => { e.preventDefault(); addItem(product.id); }}>
-                      <ShoppingCart className="w-4 h-4" />
-                    </Button>
+                    <Button size="sm" variant="secondary" disabled={product.stock <= 0} onClick={(e) => { e.preventDefault(); addItem(product.id); }}><ShoppingCart className="w-4 h-4" /></Button>
                   </div>
                 </div>
               </div>
