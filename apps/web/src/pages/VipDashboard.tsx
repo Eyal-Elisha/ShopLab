@@ -61,7 +61,7 @@ export default function VipDashboard() {
           </div>
           <h1 className="text-2xl font-display font-bold">VIP Dashboard</h1>
           <p className="text-sm text-muted-foreground">
-            Exclusive area for ShopLab administrators.
+            Exclusive area for ShopLab premium members.
           </p>
         </div>
 
@@ -75,7 +75,7 @@ export default function VipDashboard() {
             {isGranted ? (
               <>
                 <p className="text-sm font-medium text-yellow-600 dark:text-yellow-400">
-                  🏆 Access Granted — Welcome to the VIP lounge.
+                  🏆 Access Granted - Welcome to the VIP lounge.
                 </p>
                 <p className="text-sm text-muted-foreground">{result?.message}</p>
                 <div className="rounded-lg bg-background border p-3 font-mono text-sm break-all select-all">
@@ -95,12 +95,12 @@ export default function VipDashboard() {
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {result?.message ||
-                    "This area is restricted to administrators only."}
+                    "This area is restricted to premium members only."}
                 </p>
                 <div className="rounded-lg bg-background border border-dashed p-3 text-xs text-muted-foreground space-y-1">
                   <p className="font-mono font-semibold text-foreground">Hint</p>
                   <p>
-                    The server checked your <span className="font-mono text-foreground">shoplab_prefs</span> cookie to determine your role.
+                    The server checked your <span className="font-mono text-foreground">shoplab_prefs</span> cookie to determine your tier.
                     Open <span className="font-mono text-foreground">DevTools → Application → Cookies</span> and take a look.
                   </p>
                 </div>

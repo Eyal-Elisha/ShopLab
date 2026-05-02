@@ -99,11 +99,11 @@ async function setPreferences(req, res) {
   // Valid values: 'light' | 'dark'. Anything else defaults to 'light'.
   const theme = req.body.theme === 'dark' ? 'dark' : 'light';
 
-  // VULNERABILITY: the role is embedded in the serialized cookie and later trusted
+  // VULNERABILITY: the tier is embedded in the serialized cookie and later trusted
   // without any signature or integrity check.
   const prefs = {
     theme,
-    role: req.user.role,   // pulled from verified JWT — but then stored client-side
+    tier: 'standard',   // every user starts as 'standard' — but this is stored client-side
     userId: req.user.id,
   };
 
@@ -145,11 +145,11 @@ async function getVipFlag(req, res) {
     return res.status(400).json({ error: 'Malformed preferences cookie.' });
   }
 
-  // VULNERABILITY: trusts the role from the client-controlled cookie
-  if (prefs.role !== 'admin') {
+  // VULNERABILITY: trusts the tier from the client-controlled cookie
+  if (prefs.tier !== 'vip') {
     return res.status(403).json({
-      error: 'VIP access is for administrators only.',
-      message: `Your current role is: "${prefs.role}". You know what to do.`,
+      error: 'VIP access is for premium members only.',
+      message: `Your current tier is: "${prefs.tier || 'standard'}". You know what to do.`,
     });
   }
 
