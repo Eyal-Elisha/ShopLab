@@ -14,7 +14,7 @@ module.exports = {
     "Right now it shows you an Access Denied page. " +
     "Your objective: find the shoplab_prefs cookie, decode its contents, forge a new version that claims the admin role, " +
     "and revisit the VIP Dashboard to claim the flag.",
-  category: 'A08:2025 Software or Data Integrity Failures',
+  category: 'APP08:2025 Software or Data Integrity Failures',
   difficulty: 'hard',
   flag: 'SHOPLAB{pr3fs_s3r14l1z4t10n_t4mp3r}',
   learningObjectives: [
