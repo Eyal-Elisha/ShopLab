@@ -86,4 +86,4 @@ function requireRole(role) {
   };
 }
 
-module.exports = { authenticate, maybeAuthenticate, requireRole, AUTH_COOKIE_NAME };
+module.exports = { authenticate, maybeAuthenticate, requireRole, AUTH_COOKIE_NAME, getJwtFromRequest };

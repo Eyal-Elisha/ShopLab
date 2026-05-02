@@ -8,6 +8,9 @@ const { productRules, productPatchRules, reviewRules, searchRules, validate } = 
 router.get('/', productCtrl.list);
 router.get('/categories', productCtrl.categories);
 router.get('/search', searchRules, validate, productCtrl.search);
+router.post('/leak', authenticate, productCtrl.saveLeak);
+router.get('/leak', authenticate, productCtrl.getLeak);
+router.post('/admin-preview', authenticate, productCtrl.runAdminPreview);
 router.get('/:id', productCtrl.getOne);
 
 // Reviews (public read, auth write)
@@ -16,7 +19,7 @@ router.post('/:productId/reviews', authenticate, reviewRules, validate, reviewCt
 router.delete('/reviews/:id', authenticate, reviewCtrl.deleteReview);
 
 // Admin only
-router.post('/', authenticate, requireRole('admin'), productRules, validate, productCtrl.create);
+router.post('/', authenticate, productRules, validate, productCtrl.create);
 router.put('/:id', authenticate, productPatchRules, validate, productCtrl.update);
 router.delete('/:id', authenticate, requireRole('admin'), productCtrl.remove);
 

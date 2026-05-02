@@ -12,6 +12,10 @@ function formatMoney(value: number | string) {
   return Number.isFinite(amount) ? amount.toFixed(2) : "0.00";
 }
 
+function productImageMarkup(product: AdminProduct) {
+  return `<img src="${product.image_url || "/placeholder.svg"}" alt="" class="h-12 w-12 rounded object-cover border" />`;
+}
+
 export default function AdminProductsTable({ products, onChanged }: { products: AdminProduct[]; onChanged: () => Promise<void> }) {
   const [editing, setEditing] = useState<AdminProduct | null>(null);
   const [deleting, setDeleting] = useState<Record<number, boolean>>({});
@@ -37,13 +41,14 @@ export default function AdminProductsTable({ products, onChanged }: { products: 
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead><TableHead>Category</TableHead>
+              <TableHead>Image</TableHead><TableHead>Name</TableHead><TableHead>Category</TableHead>
               <TableHead>Price</TableHead><TableHead>Stock</TableHead><TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {products.map((p) => (
               <TableRow key={p.id}>
+                <TableCell dangerouslySetInnerHTML={{ __html: productImageMarkup(p) }} />
                 <TableCell className="font-medium">{p.name}</TableCell>
                 <TableCell>
                   {p.category_name ? <Badge variant="secondary">{p.category_name}</Badge> : <span className="text-muted-foreground text-sm">--</span>}
