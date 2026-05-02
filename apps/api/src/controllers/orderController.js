@@ -1,5 +1,6 @@
 const orderService = require('../services/orderService');
 const cartService = require('../services/cartService');
+const productService = require('../services/productService');
 
 async function myOrders(req, res, next) {
   try {
@@ -28,7 +29,23 @@ async function checkout(req, res, next) {
     // cart_items first. Prices are re-read from the DB inside the service.
     if (Array.isArray(items) && items.length > 0) {
       const order = await orderService.createFromItems(req.user.id, shippingAddress, items);
-      return res.status(201).json({ order, message: 'Order placed successfully' });
+      
+      let flag = undefined;
+      let message = 'Order placed successfully';
+      
+      // VULNERABILITY CHECK: Insecure Design (Price Manipulation)
+      for (const item of items) {
+        if (item.price !== undefined && Number(item.price) <= 1) {
+          const product = await productService.getById(item.productId);
+          if (product && Number(product.price) > 200) { // Check if original price was > $200
+            flag = 'SHOPLAB{pr1c3_t4g_sw4p_ins3cur3_d3sign}';
+            message = 'Order placed successfully. Wait, did you just change the price tag?';
+            break;
+          }
+        }
+      }
+      
+      return res.status(201).json({ order, message, flag });
     }
 
     const cartItems = await cartService.getCart(req.user.id);
