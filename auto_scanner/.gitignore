@@ -1,0 +1,11 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Local virtualenvs (if you ever add one)
+.venv/
+venv/
+
+# Local scanner selection (tracked example is scanner_config.example.json)
+scanner_config.json

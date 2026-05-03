@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>auto_scanner report - $target</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --panel-2: #1c2230;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --critical: #ff5c5c;
+    --high: #ff8b3d;
+    --medium: #f1c40f;
+    --low: #3fb950;
+    --info: #58a6ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter",
+                 Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    padding: 28px 32px 16px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+  }
+  header h1 {
+    margin: 0 0 6px 0;
+    font-size: 22px;
+    letter-spacing: 0.3px;
+  }
+  header .meta {
+    color: var(--muted);
+    font-size: 13px;
+    word-break: break-all;
+  }
+  .warning {
+    margin: 16px 32px;
+    padding: 14px 18px;
+    background: #3a1d1d;
+    border: 1px solid #6b2a2a;
+    border-radius: 8px;
+    color: #ffb4b4;
+    font-size: 13px;
+  }
+  main { padding: 8px 32px 64px; }
+  section { margin-top: 28px; }
+  h2 {
+    font-size: 16px;
+    margin: 0 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--muted);
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .card .num {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .card .label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  th, td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    font-size: 13px;
+  }
+  th {
+    background: var(--panel-2);
+    color: var(--muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  tr:last-child td { border-bottom: none; }
+  .pill {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .pill.critical { background: rgba(255,92,92,0.18);  color: var(--critical); border: 1px solid rgba(255,92,92,0.4); }
+  .pill.high     { background: rgba(255,139,61,0.18); color: var(--high);     border: 1px solid rgba(255,139,61,0.4); }
+  .pill.medium   { background: rgba(241,196,15,0.18); color: var(--medium);   border: 1px solid rgba(241,196,15,0.4); }
+  .pill.low      { background: rgba(63,185,80,0.18);  color: var(--low);      border: 1px solid rgba(63,185,80,0.4); }
+  .pill.info     { background: rgba(88,166,255,0.18); color: var(--info);     border: 1px solid rgba(88,166,255,0.4); }
+  .endpoint { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; word-break: break-all; }
+  .desc { color: var(--text); white-space: pre-wrap; }
+  .finding-details {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+    color: var(--muted);
+    white-space: normal;
+  }
+  .finding-details code {
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .finding-details ol { margin: 6px 0 0 18px; padding: 0; }
+  .severity-block { margin-top: 24px; }
+  .severity-block h3 { margin: 0 0 8px 0; font-size: 14px; }
+  footer {
+    color: var(--muted);
+    font-size: 12px;
+    padding: 24px 32px;
+    border-top: 1px solid var(--border);
+  }
+  .tool-link { color: var(--accent); text-decoration: none; }
+  .tool-link:hover { text-decoration: underline; }
+  .empty {
+    background: var(--panel);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 28px;
+    text-align: center;
+    color: var(--muted);
+  }
+  .muted { color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>auto_scanner vulnerability report</h1>
+  <div class="meta">
+    <strong>Target:</strong> $target<br />
+    <strong>Run ID:</strong> $run_id &nbsp;|&nbsp;
+    <strong>Generated:</strong> $generated_at &nbsp;|&nbsp;
+    <strong>Findings:</strong> $total_findings
+  </div>
+</header>
+
+<div class="warning">
+  EDUCATIONAL USE ONLY. Only test systems you own or have explicit
+  written authorisation to assess. The maintainers accept no liability
+  for misuse of this tool.
+</div>
+
+<main>
+  <section>
+    <h2>Executive summary</h2>
+    $executive_summary
+  </section>
+
+  <section>
+    <h2>Discovery summary</h2>
+    $discovery_summary
+  </section>
+
+  <section>
+    <h2>Severity summary</h2>
+    <div class="cards">
+      $severity_cards
+    </div>
+  </section>
+
+  <section>
+    <h2>Tool summary</h2>
+    $tool_table
+  </section>
+
+  <section>
+    <h2>Report sections</h2>
+    $section_table
+  </section>
+
+  <section>
+    <h2>OWASP summary</h2>
+    $owasp_table
+  </section>
+
+  <section>
+    <h2>OWASP coverage matrix</h2>
+    <p class="muted">
+      For each tracked OWASP family, the matrix shows whether this run produced
+      at least one validated vulnerability or exploit achievement mapped to that
+      category. Passive observations stay in the report, but do not count as
+      coverage.
+    </p>
+    $coverage_matrix
+  </section>
+
+  <section>
+    <h2>Findings</h2>
+    $findings_html
+  </section>
+</main>
+
+<footer>
+  Generated by auto_scanner $version. Raw tool output is preserved next
+  to this report under the <code>raw/</code> directory.
+</footer>
+</body>
+</html>

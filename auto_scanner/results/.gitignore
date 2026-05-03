@@ -1,0 +1,4 @@
+# Per-run scan output should never be committed.
+*
+!.gitignore
+!.gitkeep

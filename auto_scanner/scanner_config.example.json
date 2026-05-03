@@ -1,0 +1,139 @@
+﻿{
+  "_comment_top": "Copy to scanner_config.json and edit. Every key is optional; missing => sensible default.",
+  "_comment_profile": "Profiles: fast, full, active-lab, api-focused, passive-only.",
+  "profile": "fast",
+  "active_mode": false,
+
+  "scanners": {
+    "http_checks": true,
+    "discovery": true,
+    "ssl": true,
+    "active_web": false,
+    "active_api": false,
+    "stateful_lab": false,
+    "authenticated_probes": false,
+    "exploit_validator": false,
+    "browser": false,
+    "llm_probe": false,
+    "dirb": true,
+    "sqlmap": false,
+    "nuclei": false,
+    "nikto": true,
+    "zap": true
+  },
+
+  "timeout": 300,
+  "_comment_validation": "Phase 2 runs only tools justified by discovery. intensity: safe, active, aggressive-lab. Full ZAP and destructive writes should stay aggressive-lab only.",
+  "validation": {
+    "enabled": true,
+    "intensity": "safe",
+    "zap_mode": "baseline"
+  },
+  "zap_docker": false,
+
+  "_comment_zap_network": "Container-to-container networking for ZAP (recommended on WSL2 if your target is also a container).",
+  "zap_docker_network": null,
+  "zap_docker_target_container": null,
+
+  "_comment_seed": "extra_endpoints stack on top of crawl/fingerprint candidates. No preset is shipped — the tool is meant to be generic.",
+  "extra_endpoints": [],
+  "http_timeout": 10,
+  "request_delay": 0.05,
+
+  "_comment_open_redirect": "Names of query parameters that look like redirect targets. The probe only retries URLs the crawler already produced.",
+  "open_redirect_param_names": [
+    "url", "next", "redirect", "redirect_uri", "to", "return", "returnTo", "returnUrl", "destination"
+  ],
+  "cors_probe_origin": "https://probe.invalid",
+
+  "_comment_stateful": "Optional stateful probes. Provide concrete paths/payloads — the scanner ships no built-in defaults.",
+  "stateful_enabled": false,
+  "stateful": {
+    "create_users": false,
+    "user_count": 1,
+    "registration_path": null,
+    "registration_payload": null,
+    "login_path": null,
+    "login_payload": null,
+    "profile_paths": [],
+    "feedback_path": null,
+    "mass_assignment_probe": true
+  },
+
+  "_comment_authenticated_probes": "OPT-IN. Crawl-driven authenticated harness. JWT-none / forged remember-me probes default OFF and additionally require --experimental-auth.",
+  "authenticated_probes_enabled": false,
+  "authenticated_probes_max_get": 60,
+  "exploit_validator_id_budget": 80,
+  "exploit_validator_file_budget": 40,
+  "exploit_validator_sql_budget": 40,
+  "exploit_validator_id_ceiling": 12,
+  "exploit_validator_product_limit": 20,
+  "exploit_validator_register_path": "api/auth/register",
+  "exploit_validator_login_path": "api/auth/login",
+  "authenticated_probes_max_coupon": 80,
+  "authenticated_probes_max_escalation": 120,
+  "authenticated_probes_max_flag_probes": 30,
+  "authenticated_probes_extra_codes": [],
+  "authenticated_probes_coupon_fields": ["code", "coupon", "voucher", "promoCode"],
+  "authenticated_probes_headers": [
+    "X-Promo-Key", "X-Admin-Key", "X-Internal-Key", "X-Debug-Key",
+    "X-Api-Key", "X-Override", "X-Internal", "X-Override-Role"
+  ],
+  "_comment_authenticated_public_paths": "Omit key for default ONE fetch of /api to merge catalog URLs. Use [] to disable public catalog ingestion entirely.",
+  "authenticated_probes_probe_derived_numeric_ids": true,
+  "authenticated_probes_probe_state_changing_writes": false,
+  "authenticated_probes_idor_budget": 160,
+  "authenticated_probes_max_idor_templates": 48,
+  "authenticated_probes_numeric_id_ceiling": 36,
+  "authenticated_probes_extra_coupon_urls": [],
+  "authenticated_probes_coupon_path_prefixes": [],
+  "authenticated_probes_product_list_limit": 48,
+  "authenticated_probes_product_detail_max": 12,
+  "authenticated_probes_product_put_max": 24,
+  "authenticated_probes_put_bodies": [],
+  "authenticated_probes_escalation_paths": [],
+  "authenticated_probes_extra_sensitive_urls": [],
+  "authenticated_probes_extra_sensitive_paths": [],
+  "authenticated_probes_probe_search_sql": true,
+  "authenticated_probes_include_common_search_fallbacks": false,
+
+  "_comment_experimental_auth": "Destructive opt-in probes. Require --experimental-auth AND fully-supplied paths/payloads/identities. Empty values disable the probe.",
+  "experimental_auth": false,
+  "authenticated_probes_jwt_paths": [],
+  "authenticated_probes_jwt_payloads": [],
+  "authenticated_probes_remember_cookie_names": [],
+  "authenticated_probes_remember_identities": [],
+  "authenticated_probes_remember_flag_paths": [],
+
+  "_comment_browser": "Optional Playwright mode. Install with: python -m pip install playwright && python -m playwright install chromium",
+  "browser_enabled": false,
+  "browser_routes": ["/"],
+
+  "_comment_llm_probe": "Provide an explicit chat/completions URL OR rely on discovery surfacing /chat, /v1/chat, /assistant, etc.",
+  "llm_probe_url": null,
+
+  "_comment_auth": "Optional generic login support. Leave disabled unless you have lab credentials.",
+  "auth": {
+    "enabled": false,
+    "login_path": "",
+    "method": "POST",
+    "json": true,
+    "username_field": "email",
+    "password_field": "password",
+    "username": "",
+    "password": ""
+  },
+
+  "_comment_external": "External tool tuning.",
+  "dirb_wordlist": null,
+  "sqlmap_after_broad_scans": true,
+  "sqlmap_max_targets": 6,
+  "nuclei_tags": "tech,exposure,misconfig",
+  "nuclei_rate_limit": 50,
+  "nuclei_concurrency": 10,
+  "nuclei_max_urls": 15,
+  "active_web_max_param_tests": 25,
+  "active_api_max_get_tests": 40,
+
+  "nikto_args": []
+}
