@@ -1,8 +1,8 @@
 module.exports = {
   slug: 'llm-prompt-injection',
-  name: 'Support Concierge — Prompt Injection Playground',
+  name: 'Support Chat — Prompt Injection Playground',
   summary:
-    "ShopLab's concierge is a real local LLM with a strict system policy and multi-turn memory. Steer the model until it discloses staff-only material it was told never to reveal.",
+    "ShopLab's Support Chat uses a real local LLM with a strict system policy and multi-turn memory. Steer the model until it discloses staff-only material it was told never to reveal.",
   description:
     "This exercise maps to OWASP LLM01:2025 — Prompt Injection (see the OWASP Top 10 for LLM Applications project for the full entry).\n\n" +
     "The assistant receives a confidential system prompt (including a hidden handoff token) and prior chat turns on every request. There is no server-side keyword gate: disclosure depends on the model prioritising adversarial user content over policy. Multi-turn context helps indirect and incremental attacks.\n\n" +
@@ -39,6 +39,6 @@ module.exports = {
     label: 'Open support bot page',
     title: 'Support surfaces',
     description:
-      'Launcher-style widget: visit Home. Full-page chat: open the support assistant route.',
+      'Launcher-style widget: visit Home. Full-page Support Chat: open the /support-bot route.',
   },
 };

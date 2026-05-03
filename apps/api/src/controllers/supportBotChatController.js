@@ -1,4 +1,8 @@
 const supportBotChatService = require('../services/supportBotChatService');
+const {
+  parseSupportChallengeMode,
+  listSupportChallengeModes,
+} = require('../challenges/supportChallengeModes');
 
 const MAX_MESSAGE = 8000;
 /** Client may send extra turns; only the tail is used after sanitization. */
@@ -20,6 +24,12 @@ function isValidHistoryEntry(entry) {
     return false;
   }
   return true;
+}
+
+function clientIp(req) {
+  const forwarded = typeof req.headers['x-forwarded-for'] === 'string' ? req.headers['x-forwarded-for'].split(',')[0] : '';
+  const cand = (forwarded && forwarded.trim()) || req.ip || req.socket?.remoteAddress || '';
+  return cand.trim() || undefined;
 }
 
 async function chat(req, res, next) {
@@ -58,8 +68,25 @@ async function chat(req, res, next) {
       }
     }
 
-    const result = await supportBotChatService.generateReply(message, rawHistory ?? []);
-    res.json({ reply: result.reply });
+    let challengeMode;
+    if (body?.challengeMode !== undefined && body?.challengeMode !== null) {
+      const parsed = parseSupportChallengeMode(body.challengeMode);
+      if (parsed === null) {
+        res.status(400).json({
+          error: `challengeMode must be one of: ${listSupportChallengeModes().join(', ')}`,
+        });
+        return;
+      }
+      challengeMode = parsed;
+    } else {
+      challengeMode = parseSupportChallengeMode(undefined);
+    }
+
+    const result = await supportBotChatService.generateReply(message, rawHistory ?? [], {
+      challengeMode,
+      clientIp: clientIp(req),
+    });
+    res.json({ reply: result.reply, model: result.model });
   } catch (err) {
     next(err);
   }

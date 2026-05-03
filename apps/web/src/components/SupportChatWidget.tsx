@@ -4,10 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { api, extractApiError } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 type Role = "user" | "assistant";
+
+/** POST /api/support-chat `challengeMode` (LLM01 / LLM10 lab switch). */
+export type SupportChallengeMode = "llm01" | "llm10";
 
 export type ChatLine = { id: string; role: Role; text: string };
 
@@ -58,12 +63,18 @@ export function SupportChatPanel({
   title = "ShopLab support",
   subtitle = "Orders, shipping, and returns — we’re here to help.",
   initialLines,
+  defaultChallengeMode = "llm01",
+  showChallengeModeSelector = true,
 }: {
   className?: string;
   title?: string;
   subtitle?: string;
   initialLines?: ChatLine[];
+  /** Sent as JSON `challengeMode` on each Support Chat request. */
+  defaultChallengeMode?: SupportChallengeMode;
+  showChallengeModeSelector?: boolean;
 }) {
+  const [challengeMode, setChallengeMode] = useState<SupportChallengeMode>(defaultChallengeMode);
   const [lines, setLines] = useState<ChatLine[]>(
     () =>
       initialLines ?? [
@@ -98,7 +109,7 @@ export function SupportChatPanel({
         role: line.role,
         content: line.text,
       }));
-      const { reply } = await api.sendSupportConciergeMessage(text, history);
+      const { reply } = await api.sendSupportChatMessage(text, history, challengeMode);
       setLines((prev) => [...prev, { id: nextId(), role: "assistant", text: reply }]);
     } catch (err) {
       setError(extractApiError(err));
@@ -108,13 +119,32 @@ export function SupportChatPanel({
   }
 
   return (
-    <div className={cn("flex min-h-0 flex-col", className)}>
-      <div className="border-b border-border/60 px-1 pb-2">
-        <p className="text-sm font-semibold text-foreground">{title}</p>
-        <p className="text-xs text-muted-foreground">{subtitle}</p>
+    <div className={cn("flex min-h-0 flex-1 flex-col", className)}>
+      <div className="shrink-0 border-b border-border/60 px-1 pb-2 space-y-2">
+        <div>
+          <p className="text-sm font-semibold text-foreground">{title}</p>
+          <p className="text-xs text-muted-foreground">{subtitle}</p>
+        </div>
+        {showChallengeModeSelector && (
+          <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-3">
+            <Label htmlFor="support-challenge-mode" className="text-xs text-muted-foreground shrink-0 whitespace-nowrap">
+              Challenge mode
+            </Label>
+            <Select value={challengeMode} onValueChange={(v) => setChallengeMode(v as SupportChallengeMode)}>
+              <SelectTrigger id="support-challenge-mode" className="h-8 text-xs sm:min-w-[200px]" aria-label="Challenge mode">
+                <SelectValue placeholder="Mode" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="llm01">LLM01 — Prompt injection</SelectItem>
+                <SelectItem value="llm10">LLM10 — Unbounded consumption</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
       </div>
 
-      <ScrollArea className="min-h-[200px] flex-1 pr-2">
+      <div className="min-h-0 flex-1">
+        <ScrollArea className="h-full max-h-full min-h-[120px] pr-2">
         <ul className="space-y-3 py-3">
           {lines.map((line) => (
             <li
@@ -136,7 +166,8 @@ export function SupportChatPanel({
           )}
           <div ref={listEndRef} />
         </ul>
-      </ScrollArea>
+        </ScrollArea>
+      </div>
 
       {error && (
         <p className="mb-2 text-xs text-destructive" role="alert">
@@ -144,7 +175,7 @@ export function SupportChatPanel({
         </p>
       )}
 
-      <div className="flex items-center gap-2 border-t border-border/60 pt-2">
+      <div className="shrink-0 flex items-center gap-2 border-t border-border/60 pt-2">
         <Textarea
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
@@ -297,7 +328,7 @@ export function SupportChatDock() {
                   size="icon"
                   className="h-8 w-8 shrink-0"
                   onClick={() => setOpen(false)}
-                  aria-label="Close support chat"
+                  aria-label="Close Support Chat"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -320,7 +351,7 @@ export function SupportChatDock() {
         className="pointer-events-auto h-14 w-14 rounded-full p-0 shadow-lg"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        aria-label={open ? "Hide support chat" : "Open support chat"}
+        aria-label={open ? "Hide Support Chat" : "Open Support Chat"}
       >
         <MessageCircle className="h-6 w-6" />
       </Button>

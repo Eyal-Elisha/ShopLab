@@ -2,6 +2,7 @@ const brokenAccessControlDef = require('./definitions/brokenAccessControl');
 const profileBolaDef = require('./definitions/profileBola');
 const bflaEvalDef = require('./definitions/bflaEval');
 const llmPromptInjectionDef = require('./definitions/llmPromptInjection');
+const llmUnboundedConsumptionDef = require('./definitions/llmUnboundedConsumption');
 const rememberMeBrokenAuthDef = require('./definitions/rememberMeBrokenAuth');
 const boplaDef = require('./definitions/bopla');
 const sqlInjectionDef = require('./definitions/sqlInjection');
@@ -18,6 +19,7 @@ const registeredChallenges = [
   { definition: profileBolaDef },
   { definition: bflaEvalDef },
   { definition: llmPromptInjectionDef },
+  { definition: llmUnboundedConsumptionDef },
   { definition: rememberMeBrokenAuthDef },
   { definition: boplaDef },
   { definition: sqlInjectionDef },

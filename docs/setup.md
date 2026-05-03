@@ -168,9 +168,9 @@ SELECT id FROM orders WHERE staff_notes IS NOT NULL LIMIT 1;
 
 ---
 
-## 10. Ollama (support chat / LLM challenge)
+## 10. Ollama (Support Chat / LLM challenges)
 
-The support chat API talks to **only** Ollama. In **`apps/api/.env`** set **`OLLAMA_MODEL`** — this repo assumes **`llama3.2`** after `ollama pull llama3.2` (whatever `ollama list` prints must match).
+The Support Chat API talks to **only** Ollama. In **`apps/api/.env`** set **`OLLAMA_MODEL`** — this repo assumes **`llama3.2`** after `ollama pull llama3.2` (whatever `ollama list` prints must match).
 
 - **`OLLAMA_MODEL`** — typically `llama3.2` here; adjust if you pulled a different tag.
 - Optional overrides (omit to use defaults): `OLLAMA_BASE_URL` defaults to `http://127.0.0.1:11434`, `OLLAMA_TIMEOUT_MS` defaults to `120000` (ms).

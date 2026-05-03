@@ -259,13 +259,18 @@ export const api = {
       body: { slug, flag },
     }),
   getHints: (slug: string) => request<{ hints: Hint[] }>(`/hints/${slug}`),
-  sendSupportConciergeMessage: (
+  sendSupportChatMessage: (
     message: string,
     history: Array<{ role: "user" | "assistant"; content: string }> = [],
+    challengeMode?: "llm01" | "llm10",
   ) =>
-    request<{ reply: string }>("/support-chat", {
+    request<{ reply: string; model?: string }>("/support-chat", {
       method: "POST",
-      body: { message, history },
+      body: {
+        message,
+        history,
+        ...(challengeMode !== undefined ? { challengeMode } : {}),
+      },
     }),
   callAnyApi: (path: string, method: string = "GET", body?: unknown) => {
     // Strip leading /api if present because the request helper adds it back
