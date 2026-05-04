@@ -48,6 +48,7 @@ app.use('/api/account', require('./routes/account'));
 app.use('/api/challenges', require('./routes/challenges'));
 app.use('/api/hints', require('./routes/hints'));
 app.use('/api/support-chat', require('./routes/supportChat'));
+app.use('/api/newsletter', require('./routes/newsletter'));
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));

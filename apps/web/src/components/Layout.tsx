@@ -136,10 +136,55 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       <main className="flex-1">{children}</main>
 
-      <footer className="border-t py-8 mt-12">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p className="font-display font-semibold text-foreground mb-1">ShopLab</p>
-          <p>Course-ready security commerce sandbox for web, API, and interactive lab exercises.</p>
+      <footer className="border-t py-12 mt-12 bg-card/30">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="grid md:grid-cols-2 gap-12 items-center mb-12">
+            <div className="text-left space-y-2">
+              <h3 className="font-display font-bold text-lg">Stay in the loop</h3>
+              <p className="text-sm text-muted-foreground">
+                Subscribe to our security newsletter for the latest ShopLab updates and lab exercises.
+              </p>
+            </div>
+            <form 
+              className="flex gap-2" 
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const form = e.currentTarget;
+                const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+                try {
+                  const res = await fetch('/api/newsletter/subscribe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                  });
+                  const data = await res.json();
+                  if (res.ok) {
+                    alert(data.message);
+                  } else {
+                    console.error('Subscription Error Context:', data);
+                    alert(`Error: ${data.message || 'Failed to subscribe'}. Check console for details.`);
+                  }
+                } catch (err) {
+                  console.error('Network Error:', err);
+                  alert('Network error occurred.');
+                }
+              }}
+            >
+              <input
+                name="email"
+                type="email"
+                placeholder="email@example.com"
+                className="flex-1 h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                required
+              />
+              <Button type="submit" size="sm">Subscribe</Button>
+            </form>
+          </div>
+
+          <div className="border-t pt-8 text-center text-sm text-muted-foreground">
+            <p className="font-display font-semibold text-foreground mb-1">ShopLab</p>
+            <p>Course-ready security commerce sandbox for web, API, and interactive lab exercises.</p>
+          </div>
         </div>
       </footer>
     </div>
