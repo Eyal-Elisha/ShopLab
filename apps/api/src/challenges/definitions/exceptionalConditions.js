@@ -1,6 +1,6 @@
 module.exports = {
   slug: 'exceptional-conditions',
-  name: 'Operation: Verbose Failure',
+  name: 'Verbose Failure',
   summary:
     "A newsletter subscription feature fails to handle unexpected input types. Force the server to crash and leak its internal debug context.",
   description:
@@ -8,7 +8,7 @@ module.exports = {
     "This challenge maps to OWASP A10:2025 — Mishandling of Exceptional Conditions.\n\n" +
     "Your objective: Find the newsletter subscription feature, determine how to trigger an unhandled exception by sending malformed input, and extract the flag from the verbose error response.",
   category: 'APP10:2025 Mishandling of Exceptional Conditions',
-  difficulty: 'medium',
+  difficulty: 'easy',
   flag: 'SHOPLAB{v3rb0s3_3rr0r_l3ak_410}',
   learningObjectives: [
     'Recognize the risk of verbose error messages in production environments',

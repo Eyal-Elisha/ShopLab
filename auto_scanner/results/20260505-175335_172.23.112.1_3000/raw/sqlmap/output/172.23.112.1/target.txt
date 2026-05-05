@@ -1,0 +1,1 @@
+http://172.23.112.1:3000/rest/user/change-password?current= (GET)  # /usr/bin/sqlmap -u http://172.23.112.1:3000/rest/user/change-password?current= --batch --level 1 --risk 1 --flush-session --disable-coloring --output-dir /mnt/c/Users/yamin/ShopLab/auto_scanner/results/20260505-175335_172.23.112.1_3000/raw/sqlmap/output

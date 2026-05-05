@@ -37,9 +37,13 @@ async function checkout(req, res, next) {
       for (const item of items) {
         if (item.price !== undefined && Number(item.price) <= 1) {
           const product = await productService.getById(item.productId);
-          if (product && Number(product.price) > 200) { // Check if original price was > $200
+          if (product && Number(product.price) > 200) {
             flag = 'SHOPLAB{pr1c3_t4g_sw4p_ins3cur3_d3sign}';
             message = 'Order placed successfully. Wait, did you just change the price tag?';
+            
+            // Save the flag to the order so it appears in the receipt UI
+            await orderService.updateStatus(order.id, 'COMPLETED');
+            await orderService.updateStaffNotes(order.id, `FLAG: ${flag}`);
             break;
           }
         }

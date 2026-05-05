@@ -99,11 +99,8 @@ async function setPreferences(req, res) {
   // Valid values: 'light' | 'dark'. Anything else defaults to 'light'.
   const theme = req.body.theme === 'dark' ? 'dark' : 'light';
 
-  // VULNERABILITY: the tier is embedded in the serialized cookie and later trusted
-  // without any signature or integrity check.
   const prefs = {
     theme,
-    tier: 'standard',   // every user starts as 'standard' — but this is stored client-side
     userId: req.user.id,
   };
 
@@ -129,35 +126,4 @@ async function getPreferences(req, res) {
   }
 }
 
-async function getVipFlag(req, res) {
-  const raw = parseCookies(req)[PREFS_COOKIE];
-  if (!raw) {
-    return res.status(403).json({
-      error: 'No preferences cookie found.',
-      hint: 'Set your preferences first by POSTing to /api/user/me/preferences.',
-    });
-  }
-
-  let prefs;
-  try {
-    prefs = JSON.parse(Buffer.from(raw, 'base64').toString('utf8'));
-  } catch {
-    return res.status(400).json({ error: 'Malformed preferences cookie.' });
-  }
-
-  // VULNERABILITY: trusts the tier from the client-controlled cookie
-  if (prefs.tier !== 'vip') {
-    return res.status(403).json({
-      error: 'VIP access is for premium members only.',
-      message: `Your current tier is: "${prefs.tier || 'standard'}". You know what to do.`,
-    });
-  }
-
-  res.json({
-    flag: 'SHOPLAB{pr3fs_s3r14l1z4t10n_t4mp3r}',
-    message: "Welcome to the VIP lounge. You tampered with a cookie the server should never have trusted.",
-    prefs,
-  });
-}
-
-module.exports = { getMe, updateMe, updatePassword, getPreferences, setPreferences, getVipFlag };
+module.exports = { getMe, updateMe, updatePassword, getPreferences, setPreferences };

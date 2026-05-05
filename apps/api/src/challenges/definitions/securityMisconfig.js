@@ -1,8 +1,9 @@
 module.exports = {
-  name: "Operation: Hidden Backup",
+  name: "Exposed Configuration Backup",
   slug: "security-misconfig",
   category: "APP02:2025 Security Misconfiguration",
   difficulty: "easy",
+  flag: "SHOPLAB{hidd3n_b4ckup_f0und_402}",
   summary: "Find a sensitive backup file that was accidentally left in a public directory.",
   description:
     "Security through obscurity is not security. Developers often leave sensitive files like backups, " +

@@ -1,0 +1,23 @@
+{
+  "discovery_scanners": [
+    "http_checks",
+    "discovery",
+    "browser",
+    "dirb"
+  ],
+  "validation_scanners": [
+    "zap",
+    "active_web",
+    "active_api",
+    "stateful_lab",
+    "authenticated_probes",
+    "exploit_validator",
+    "sqlmap",
+    "nikto"
+  ],
+  "skipped": {
+    "ssl": "target is not HTTPS"
+  },
+  "validation_enabled": true,
+  "intensity": "aggressive-lab"
+}
