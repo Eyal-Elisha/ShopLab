@@ -143,4 +143,9 @@ async function updateStatus(orderId, status) {
   return result.rows[0];
 }
 
-module.exports = { getByUserId, getById, getReceipt, create, createFromItems, getAllOrders, updateStatus };
+async function updateStaffNotes(orderId, notes) {
+  const result = await query('UPDATE orders SET staff_notes = $1, updated_at = NOW() WHERE id = $2 RETURNING *', [notes, orderId]);
+  return result.rows[0];
+}
+
+module.exports = { getByUserId, getById, getReceipt, create, createFromItems, getAllOrders, updateStatus, updateStaffNotes };

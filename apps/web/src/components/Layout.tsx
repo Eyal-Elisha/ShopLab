@@ -62,8 +62,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </Link>
                 )}
                 <Link to="/vip">
-                  <Button variant="ghost" size="sm" className="text-yellow-600 dark:text-yellow-400">
-                    <Crown className="w-4 h-4 mr-1" /> VIP
+                  <Button variant="ghost" size="sm" className="text-red-600 dark:text-red-400">
+                    <Shield className="w-4 h-4 mr-1" /> Admin Panel
                   </Button>
                 </Link>
                 <Link to="/cart" className="relative">
@@ -118,7 +118,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <Link to={`/profile/${user.id}`} onClick={() => setMobileMenuOpen(false)} className="block py-2">Profile</Link>
                 <Link to="/cart" onClick={() => setMobileMenuOpen(false)} className="block py-2">Cart ({totalItems})</Link>
                 {isAdmin && <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-primary">Admin</Link>}
-                <Link to="/vip" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-yellow-600 dark:text-yellow-400">VIP Dashboard</Link>
+                <Link to="/vip" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-red-600 dark:text-red-400 font-semibold">Admin Panel</Link>
                 <button
                   onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                   className="block py-2 text-sm text-muted-foreground hover:text-foreground"

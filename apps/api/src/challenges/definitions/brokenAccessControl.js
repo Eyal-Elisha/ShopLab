@@ -28,8 +28,9 @@ module.exports = {
   // without naming the endpoint or payload outright.
   hints: [
     { level: 1, hint: "You don't own every order ID. But does the server agree?" },
-    { level: 2, hint: "An endpoint that takes a coupon code exists - even if there's no form for it in the UI. What does it return for an internal code?" },
-    { level: 3, hint: "Your account settings accept more fields than the UI sends. One extra field can change who you are - but only with the right header." },
-    { level: 4, hint: "There's an admin-only route named after this challenge. Once you're admin, ask it nicely." },
+    { level: 2, hint: "Start with your earliest order and inspect its receipt response carefully. Staff notes can contain clues that never appear in the UI." },
+    { level: 3, hint: "An endpoint that accepts a coupon code exists even without a visible form. Try what you found in the first order receipt." },
+    { level: 4, hint: "Your account settings accept more fields than the UI sends. One extra field can change who you are - but only with the right header." },
+    { level: 5, hint: "There's an admin-only route named after this challenge. Once you're admin, ask it nicely." },
   ],
 };

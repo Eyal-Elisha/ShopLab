@@ -1,0 +1,478 @@
+{
+  "target": "http://172.23.112.1:8080",
+  "root": "http://172.23.112.1:8080",
+  "scheme": "http",
+  "host": "172.23.112.1",
+  "port": 8080,
+  "is_https": false,
+  "is_private_or_local": true,
+  "endpoints": [
+    {
+      "url": "http://172.23.112.1:8080",
+      "path": "/",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/auth/jwt-flag",
+      "path": "/api/auth/jwt-flag",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": true
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/products/search?q=test",
+      "path": "/api/products/search",
+      "has_query": true,
+      "query_params": [
+        "q"
+      ],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/",
+      "path": "/",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api",
+      "path": "/api",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/robots.txt",
+      "path": "/robots.txt",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/admin",
+      "path": "/admin",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/db.config.bak",
+      "path": "/db.config.bak",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/admin",
+      "path": "/api/admin",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/coupons/apply",
+      "path": "/api/coupons/apply",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/orders/*/receipt",
+      "path": "/api/orders/*/receipt",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/account/settings",
+      "path": "/api/account/settings",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/auth/register",
+      "path": "/api/auth/register",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": true
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/auth/login",
+      "path": "/api/auth/login",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": true
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/auth/logout",
+      "path": "/api/auth/logout",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": true
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/auth/profile",
+      "path": "/api/auth/profile",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": true
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/user/me",
+      "path": "/api/user/me",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/user/me/password",
+      "path": "/api/user/me/password",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/users/:userId/profile",
+      "path": "/api/users/:userId/profile",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/products",
+      "path": "/api/products",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/products/:id",
+      "path": "/api/products/:id",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/products/admin-preview",
+      "path": "/api/products/admin-preview",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/products/leak",
+      "path": "/api/products/leak",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/products/:id/reviews",
+      "path": "/api/products/:id/reviews",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/orders",
+      "path": "/api/orders",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/orders/:id",
+      "path": "/api/orders/:id",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/orders/checkout",
+      "path": "/api/orders/checkout",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/orders/:id/receipt",
+      "path": "/api/orders/:id/receipt",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/cart",
+      "path": "/api/cart",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/cart/add",
+      "path": "/api/cart/add",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/cart/:itemId",
+      "path": "/api/cart/:itemId",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/admin/dashboard",
+      "path": "/api/admin/dashboard",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/admin/users/:userId/role",
+      "path": "/api/admin/users/:userId/role",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/admin/users/:userId",
+      "path": "/api/admin/users/:userId",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/admin/products/:productId",
+      "path": "/api/admin/products/:productId",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/admin/flag",
+      "path": "/api/admin/flag",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/admin/broken-auth-flag",
+      "path": "/api/admin/broken-auth-flag",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": true
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/admin/object-property-flag",
+      "path": "/api/admin/object-property-flag",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/challenges",
+      "path": "/api/challenges",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/challenges/solve",
+      "path": "/api/challenges/solve",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/hints/:slug",
+      "path": "/api/hints/:slug",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/support-chat",
+      "path": "/api/support-chat",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/api/health",
+      "path": "/api/health",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/@vite/client",
+      "path": "/@vite/client",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/src/main.tsx?t=1777989453019",
+      "path": "/src/main.tsx",
+      "has_query": true,
+      "query_params": [
+        "t"
+      ],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/apis",
+      "path": "/apis",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/components",
+      "path": "/components",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/favicon.ico",
+      "path": "/favicon.ico",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:8080/package",
+      "path": "/package",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    }
+  ],
+  "technologies": [],
+  "auth_hints": [
+    "/api/auth/jwt-flag",
+    "/api/auth/register",
+    "/api/auth/login",
+    "/api/auth/logout",
+    "/api/auth/profile",
+    "/api/admin/broken-auth-flag"
+  ],
+  "api_endpoints": [
+    "http://172.23.112.1:8080/api/auth/jwt-flag",
+    "http://172.23.112.1:8080/api/products/search?q=test",
+    "http://172.23.112.1:8080/api",
+    "http://172.23.112.1:8080/api/admin",
+    "http://172.23.112.1:8080/api/coupons/apply",
+    "http://172.23.112.1:8080/api/orders/*/receipt",
+    "http://172.23.112.1:8080/api/account/settings",
+    "http://172.23.112.1:8080/api/auth/register",
+    "http://172.23.112.1:8080/api/auth/login",
+    "http://172.23.112.1:8080/api/auth/logout",
+    "http://172.23.112.1:8080/api/auth/profile",
+    "http://172.23.112.1:8080/api/user/me",
+    "http://172.23.112.1:8080/api/user/me/password",
+    "http://172.23.112.1:8080/api/users/:userId/profile",
+    "http://172.23.112.1:8080/api/products",
+    "http://172.23.112.1:8080/api/products/:id",
+    "http://172.23.112.1:8080/api/products/admin-preview",
+    "http://172.23.112.1:8080/api/products/leak",
+    "http://172.23.112.1:8080/api/products/:id/reviews",
+    "http://172.23.112.1:8080/api/orders",
+    "http://172.23.112.1:8080/api/orders/:id",
+    "http://172.23.112.1:8080/api/orders/checkout",
+    "http://172.23.112.1:8080/api/orders/:id/receipt",
+    "http://172.23.112.1:8080/api/cart",
+    "http://172.23.112.1:8080/api/cart/add",
+    "http://172.23.112.1:8080/api/cart/:itemId",
+    "http://172.23.112.1:8080/api/admin/dashboard",
+    "http://172.23.112.1:8080/api/admin/users/:userId/role",
+    "http://172.23.112.1:8080/api/admin/users/:userId",
+    "http://172.23.112.1:8080/api/admin/products/:productId",
+    "http://172.23.112.1:8080/api/admin/flag",
+    "http://172.23.112.1:8080/api/admin/broken-auth-flag",
+    "http://172.23.112.1:8080/api/admin/object-property-flag",
+    "http://172.23.112.1:8080/api/challenges",
+    "http://172.23.112.1:8080/api/challenges/solve",
+    "http://172.23.112.1:8080/api/hints/:slug",
+    "http://172.23.112.1:8080/api/support-chat",
+    "http://172.23.112.1:8080/api/health",
+    "http://172.23.112.1:8080/apis"
+  ],
+  "query_urls": [
+    "http://172.23.112.1:8080/api/products/search?q=test",
+    "http://172.23.112.1:8080/src/main.tsx?t=1777989453019"
+  ],
+  "wordpress_detected": false,
+  "candidate_attacks": [
+    "sqlmap",
+    "active_api",
+    "authenticated_probes",
+    "llm",
+    "zap",
+    "nikto"
+  ],
+  "discovery_counts": {
+    "discovery": 30,
+    "http_checks": 7,
+    "dirb": 6
+  },
+  "notes": [
+    "public route catalog at /api"
+  ]
+}

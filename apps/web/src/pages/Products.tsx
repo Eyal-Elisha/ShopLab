@@ -128,6 +128,12 @@ export default function Products() {
           <p className="text-muted-foreground">Try different keywords or select another category</p>
         </div>
       )}
+      
+      {/* 
+        VULNERABILITY CLUE: This comment is intentionally rendered into the DOM 
+        to simulate a developer oversight. 
+      */}
+      <div dangerouslySetInnerHTML={{ __html: '<!-- INFO: Search indexing for legacy backups is disabled. See robots.txt for exclusion list. -->' }} />
     </div>
   );
 }

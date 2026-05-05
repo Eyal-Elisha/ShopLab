@@ -1,0 +1,116 @@
+{
+  "_comment": "Local active-lab profile for ShopLab on port 8080.",
+  "profile": "active-lab",
+  "active_mode": true,
+
+  "scanners": {
+    "http_checks": true,
+    "discovery": true,
+    "ssl": true,
+    "active_web": true,
+    "active_api": true,
+    "stateful_lab": true,
+    "authenticated_probes": true,
+    "exploit_validator": true,
+    "browser": true,
+    "dirb": true,
+    "sqlmap": true,
+    "nuclei": false,
+    "nikto": true,
+    "zap": true
+  },
+
+  "stateful_enabled": true,
+  "authenticated_probes_enabled": true,
+  "browser_enabled": true,
+  "browser_routes": ["/", "/#/score-board", "/#/administration", "/#/search"],
+
+  "timeout": 900,
+  "validation": {
+    "enabled": true,
+    "intensity": "aggressive-lab",
+    "zap_mode": "full"
+  },
+
+  "_comment_zap_host": "ZAP runs in Docker: pass --url http://<WINHOST>:8080 where WINHOST=$(ip route show default | awk '{print $3}') from WSL.",
+  "zap_docker": true,
+  "zap_docker_network": null,
+  "zap_docker_target_container": null,
+
+  "_comment_endpoints": "The /api catalog auto-discovers most routes. Only seed endpoints that are intentionally hidden from the catalog.",
+  "extra_endpoints": [
+    "/api/auth/jwt-flag",
+    "/api/products/search?q=test"
+  ],
+
+  "http_timeout": 10,
+  "request_delay": 0.05,
+
+  "auth": {
+    "enabled": false,
+    "login_path": "api/auth/login",
+    "method": "POST",
+    "json": true,
+    "username_field": "username",
+    "password_field": "password",
+    "username": "",
+    "password": ""
+  },
+
+  "stateful": {
+    "create_users": true,
+    "user_count": 2,
+    "registration_path": "api/auth/register",
+    "registration_payload": {
+      "username": "{username}",
+      "email": "{email}",
+      "password": "{password}",
+      "firstName": "Auto",
+      "lastName": "Scanner"
+    },
+    "login_path": "api/auth/login",
+    "login_payload": {
+      "username": "{username}",
+      "password": "{password}"
+    },
+    "profile_paths": ["api/auth/profile"],
+    "feedback_path": "api/products/1/reviews",
+    "feedback_payload": {"rating": 5, "comment": "auto_scanner"},
+    "password": "AutoScanner1!",
+    "mass_assignment_probe": true
+  },
+
+  "experimental_auth": true,
+
+  "authenticated_probes_probe_state_changing_writes": true,
+  "authenticated_probes_probe_price_manipulation": true,
+  "authenticated_probes_include_common_search_fallbacks": true,
+
+  "authenticated_probes_max_get": 60,
+  "authenticated_probes_max_coupon": 80,
+  "authenticated_probes_max_escalation": 120,
+  "authenticated_probes_max_flag_probes": 50,
+  "authenticated_probes_extra_codes": [],
+  "authenticated_probes_product_detail_max": 100,
+  "authenticated_probes_product_put_max": 80,
+  "authenticated_probes_product_list_limit": 100,
+
+  "exploit_validator_id_budget": 100,
+  "exploit_validator_file_budget": 50,
+  "exploit_validator_sql_budget": 50,
+  "exploit_validator_id_ceiling": 20,
+  "exploit_validator_product_limit": 50,
+  "exploit_validator_register_path": "api/auth/register",
+  "exploit_validator_login_path": "api/auth/login",
+
+  "_deep_scan_notes": "External scanners require binaries on PATH (see setup.md). Omit dirb_wordlist to use dirb's built-in list; on Linux you may set e.g. /usr/share/dirb/wordlists/common.txt.",
+  "sqlmap_after_broad_scans": true,
+  "sqlmap_max_targets": 12,
+  "nuclei_tags": "cve,vuln,exposure,misconfig,panel,default-login",
+  "nuclei_rate_limit": 50,
+  "nuclei_concurrency": 10,
+  "nuclei_max_urls": 25,
+  "active_web_max_param_tests": 25,
+  "active_api_max_get_tests": 40,
+  "nikto_args": []
+}
