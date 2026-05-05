@@ -1,6 +1,6 @@
 module.exports = {
   slug: 'exceptional-conditions',
-  name: 'Operation: Verbose Failure',
+  name: 'Verbose Failure',
   summary:
     "A newsletter subscription feature fails to handle unexpected input types. Force the server to crash and leak its internal debug context.",
   description:

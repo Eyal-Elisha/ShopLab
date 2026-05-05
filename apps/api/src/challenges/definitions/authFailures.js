@@ -1,6 +1,6 @@
 module.exports = {
   slug: 'jwt-none',
-  name: 'Operation: Admin Takeover',
+  name: 'Admin Takeover',
   summary:
     "ShopLab's admin panel is restricted, but the token verification logic has a critical flaw. Can you become the administrator and claim the throne?",
   description:

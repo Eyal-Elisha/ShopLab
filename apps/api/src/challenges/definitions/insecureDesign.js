@@ -1,6 +1,6 @@
 module.exports = {
   slug: 'insecure-design',
-  name: 'Operation: Price Tag Swap',
+  name: 'Price Tag Swap',
   summary:
     "ShopLab's checkout process looks secure on the surface, but legacy code still exists. Can you buy the most expensive item for pocket change?",
   description:

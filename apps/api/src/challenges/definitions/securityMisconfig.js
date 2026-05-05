@@ -1,5 +1,5 @@
 module.exports = {
-  name: "Operation: Hidden Backup",
+  name: "Exposed Configuration Backup",
   slug: "security-misconfig",
   category: "APP02:2025 Security Misconfiguration",
   difficulty: "easy",
