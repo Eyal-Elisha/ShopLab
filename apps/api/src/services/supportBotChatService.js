@@ -1,7 +1,8 @@
 const { flag: LAB_LLM01_FLAG } = require('../challenges/definitions/llmPromptInjection');
 const { SUPPORT_CHALLENGE_MODES } = require('../challenges/supportChallengeModes');
 const {
-  evaluateLlm10Triggers,
+  evaluatePreInferenceTriggers,
+  evaluatePostInferenceTriggers,
   buildSimulatedFailureMessage,
   logLlm10Trigger,
 } = require('../challenges/unboundedConsumption');
@@ -40,12 +41,26 @@ function httpError(status, message) {
   return err;
 }
 
-function buildOllamaRuntimeOptions() {
-  const tp = Number(process.env.OLLAMA_NUM_PREDICT);
-  const numPredict =
-    Number.isFinite(tp) && tp >= 64 && tp <= 4096
-      ? Math.floor(tp)
-      : 512;
+/**
+ * @param {string} challengeMode
+ * Per-mode num_predict: LLM10 simulates an unguarded backend, so we ignore the
+ * operator-side OLLAMA_NUM_PREDICT cap entirely and pin to the model ceiling
+ * (4096). LLM01 keeps its modest 512 default and lets OLLAMA_NUM_PREDICT
+ * tune it for speed. Without ignoring the override in LLM10 mode, a small
+ * NUM_PREDICT (e.g. 384) would prevent the reply from ever reaching the
+ * SINGLE_REPLY_OVERSIZE_THRESHOLD and the lab couldn't be tripped.
+ */
+function buildOllamaRuntimeOptions(challengeMode) {
+  const isLlm10 = challengeMode === SUPPORT_CHALLENGE_MODES.LLM10;
+
+  let numPredict;
+  if (isLlm10) {
+    numPredict = 4096;
+  } else {
+    const tp = Number(process.env.OLLAMA_NUM_PREDICT);
+    numPredict =
+      Number.isFinite(tp) && tp >= 64 && tp <= 4096 ? Math.floor(tp) : 512;
+  }
 
   const tc = Number(process.env.OLLAMA_NUM_CTX);
   const numCtx =
@@ -66,8 +81,9 @@ function buildOllamaRuntimeOptions() {
 /**
  * @param {string} systemPrompt
  * @param {{ role: 'user' | 'assistant' | 'system'; content: string }[]} messages
+ * @param {{ challengeMode?: string }} [opts]
  */
-async function callOllama(systemPrompt, messages) {
+async function callOllama(systemPrompt, messages, opts = {}) {
   const model = process.env.OLLAMA_MODEL?.trim();
   if (!model) {
     throw httpError(
@@ -98,7 +114,7 @@ async function callOllama(systemPrompt, messages) {
         keep_alive: typeof process.env.OLLAMA_KEEP_ALIVE === 'string' && process.env.OLLAMA_KEEP_ALIVE.trim()
           ? process.env.OLLAMA_KEEP_ALIVE.trim()
           : '45m',
-        options: buildOllamaRuntimeOptions(),
+        options: buildOllamaRuntimeOptions(opts.challengeMode),
       }),
       signal: controller.signal,
     });
@@ -154,9 +170,9 @@ async function generateReply(customerMessage, rawHistory, opts = {}) {
   const prior = sanitizeHistory(rawHistory);
 
   if (challengeMode === SUPPORT_CHALLENGE_MODES.LLM10) {
-    const trip = evaluateLlm10Triggers({ prior, clientIp });
-    if (trip.triggered) {
-      logLlm10Trigger(trip, clientIp);
+    const preTrip = evaluatePreInferenceTriggers({ prior, clientIp });
+    if (preTrip.triggered) {
+      logLlm10Trigger(preTrip, clientIp);
       return {
         reply: buildSimulatedFailureMessage(),
         model: 'llm10-simulated-guard',
@@ -166,7 +182,20 @@ async function generateReply(customerMessage, rawHistory, opts = {}) {
 
   const ollamaMessages = mergeAndCap(prior, customerMessage);
   const systemPrompt = buildSystemPrompt(challengeMode);
-  return callOllama(systemPrompt, ollamaMessages);
+  const result = await callOllama(systemPrompt, ollamaMessages, { challengeMode });
+
+  if (challengeMode === SUPPORT_CHALLENGE_MODES.LLM10) {
+    const postTrip = evaluatePostInferenceTriggers({ reply: result.reply });
+    if (postTrip.triggered) {
+      logLlm10Trigger(postTrip, clientIp);
+      return {
+        reply: buildSimulatedFailureMessage(),
+        model: 'llm10-simulated-guard',
+      };
+    }
+  }
+
+  return result;
 }
 
 module.exports = {

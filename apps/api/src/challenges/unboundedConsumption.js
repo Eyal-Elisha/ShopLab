@@ -3,23 +3,34 @@ const { flag: LLM10_FLAG } = require('./definitions/llmUnboundedConsumption');
 /**
  * Support Chat — unbounded consumption (lab). Active when challenge mode is llm10.
  * ---------------------------------------------------------------------------
- * Support Chat stores the thread as JSON lines: `{ role: 'user' | 'assistant', content: '…' }`.
- * - user        = the shopper’s earlier lines (already shown before you press Send).
- * - assistant   = the Support Chat bot’s earlier replies.
+ * Three triggers, evaluated around the Ollama call:
  *
- * For each POST, the browser sends `history` = that full prior thread, and `message` = the new line alone.
- * Guards below only look at `history` (plus how fast you POST), not the length of only `message`.
+ *   PRE-INFERENCE (cheap, runs before we spend tokens)
+ *     1. context_transcript_prior      — total chars in the posted history >= 60,000
+ *     2. rapid_support_chat_requests   — 6+ POSTs in 10s from the same client bucket
  *
- * Evaluation order: (1) assistant output size → (2) whole transcript size → (3) burst rate.
+ *   POST-INFERENCE (runs after the model replies)
+ *     3. single_reply_oversized        — the just-generated assistant reply >= 5,000 chars
+ *
+ * Rationale: real cost guards are usually post-hoc (token usage is only known after
+ * generation). The pre-inference checks cover transcript flooding and burst DoS;
+ * the post-inference check catches the "model was driven into one mega-reply" case.
+ *
+ * The `history` array is what the browser POSTs (everything before this Send).
+ * `message` (the new line alone) is intentionally not counted — only history and
+ * request rate are inspected pre-inference.
  */
 
 const LOG_PREFIX = '[unbounded-consumption]';
 
-/** Total characters already in chat history sent with the request (everything before this send). */
-const CONTEXT_TRANSCRIPT_PRIOR_THRESHOLD = 12_000;
+/** Total characters across the entire prior history (user + assistant). Forging a
+ *  large transcript client-side is the intended way to trip this. */
+const CONTEXT_TRANSCRIPT_PRIOR_THRESHOLD = 60_000;
 
-/** Total characters the support bot already produced in that history (role=assistant entries). */
-const ASSISTANT_PRIOR_OUTPUT_THRESHOLD = 3200;
+/** Characters in a single just-generated assistant reply. With the LLM10
+ *  num_predict default raised to 4096 tokens, this is reachable when the user
+ *  drives the model into a long enumeration / repetition. */
+const SINGLE_REPLY_OVERSIZE_THRESHOLD = 5000;
 
 const RAPID_WINDOW_MS = 10_000;
 const RAPID_MAX_REQUESTS = 6;
@@ -58,32 +69,13 @@ function totalHistoryChars(prior) {
   return n;
 }
 
-function assistantCharsInPrior(prior) {
-  let n = 0;
-  for (const m of prior) {
-    if (m.role === 'assistant') {
-      n += m.content.length;
-    }
-  }
-  return n;
-}
-
 /**
- * Budget checks use the chat history the client posts (plus request rate), not the length of the current line alone.
+ * Pre-inference: only inspects the request the client posted (history + rate).
  *
  * @param {{ prior: { role?: string; content: string }[]; clientIp: string | undefined }} input
  * @returns {{ triggered: false } | { triggered: true; threshold: string; detail: string }}
  */
-function evaluateLlm10Triggers({ prior, clientIp }) {
-  const assistantPrior = assistantCharsInPrior(prior);
-  if (assistantPrior >= ASSISTANT_PRIOR_OUTPUT_THRESHOLD) {
-    return {
-      triggered: true,
-      threshold: 'assistant_thread_output',
-      detail: `assistant_chars_in_prior=${assistantPrior} (limit ${ASSISTANT_PRIOR_OUTPUT_THRESHOLD})`,
-    };
-  }
-
+function evaluatePreInferenceTriggers({ prior, clientIp }) {
   const transcriptChars = totalHistoryChars(prior);
   if (transcriptChars >= CONTEXT_TRANSCRIPT_PRIOR_THRESHOLD) {
     return {
@@ -104,6 +96,25 @@ function evaluateLlm10Triggers({ prior, clientIp }) {
   return { triggered: false };
 }
 
+/**
+ * Post-inference: the model's reply just came back. Treat one oversized reply
+ * as a runaway-output signal.
+ *
+ * @param {{ reply: string }} input
+ * @returns {{ triggered: false } | { triggered: true; threshold: string; detail: string }}
+ */
+function evaluatePostInferenceTriggers({ reply }) {
+  const length = typeof reply === 'string' ? reply.length : 0;
+  if (length >= SINGLE_REPLY_OVERSIZE_THRESHOLD) {
+    return {
+      triggered: true,
+      threshold: 'single_reply_oversized',
+      detail: `assistant_reply_chars=${length} (limit ${SINGLE_REPLY_OVERSIZE_THRESHOLD})`,
+    };
+  }
+  return { triggered: false };
+}
+
 function buildSimulatedFailureMessage() {
   return ['UNBOUNDED CONSUMPTION DETECTED', '', `FLAG: ${LLM10_FLAG}`].join('\n');
 }
@@ -119,11 +130,12 @@ function logLlm10Trigger(meta, clientIp) {
 }
 
 module.exports = {
-  evaluateLlm10Triggers,
+  evaluatePreInferenceTriggers,
+  evaluatePostInferenceTriggers,
   buildSimulatedFailureMessage,
   logLlm10Trigger,
   CONTEXT_TRANSCRIPT_PRIOR_THRESHOLD,
-  ASSISTANT_PRIOR_OUTPUT_THRESHOLD,
+  SINGLE_REPLY_OVERSIZE_THRESHOLD,
   RAPID_WINDOW_MS,
   RAPID_MAX_REQUESTS,
 };

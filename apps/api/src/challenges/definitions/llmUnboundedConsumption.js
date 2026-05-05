@@ -1,32 +1,38 @@
 module.exports = {
   slug: 'llm-unbounded-consumption',
-  name: 'Support Chat — Unbounded Consumption (simulated)',
+  name: 'Support Chat — Unbounded Consumption',
   summary:
-    'Explore Support Chat under the LLM10 lab switch: careless LLM backends can bleed cost and availability when work or traffic is unconstrained — here the failure mode is reproduced safely.',
+    'Can you push the support bot past its consumption limits?',
   description:
-    'This exercise maps to OWASP LLM10:2025 — Unbounded Consumption (see the OWASP Top 10 for LLM Applications project).\n\n' +
-    'Your objective: investigate Support Chat while the challenge mode is set to LLM10, notice when behaviour diverges from a normal assistant reply, and recover the challenge flag.\n\n' +
-    'Play on the home-page launcher or `/support-bot`, pick LLM10 in the Challenge mode control. The API expects a working local Ollama setup when inference runs; submitting the recovered SHOPLAB{…} on this page completes the challenge.',
+    '' +
+    '\n\n' +
+    'Switch Support Chat into LLM10 mode and find a way to make the backend report "unbounded consumption". The flag is returned the moment the simulated guard trips.',
   category: 'LLM10:2025 Unbounded Consumption',
   difficulty: 'easy',
   flag: 'SHOPLAB{llm10_unb0und3d_c0nsumpt10n_lab}',
   learningObjectives: [
-    'Relate unbounded user input, unbounded retrieval, and unbounded tool loops to runaway cost and denial-of-service risk.',
-    'Contrast “fail open to the model” with budgeted context, rate limits, and bounded agent steps.',
-    'Recognize that verbose error pages and traces can leak internals or flags—treat them as sensitive output channels.',
+    'Understand unbounded consumption — without caps on output, history, or request rate an LLM backend can be driven into runaway cost or DoS.',
   ],
   hints: [
     {
       level: 1,
-      hint: 'You need challengeMode llm10 on the chat request; LLM01-only traffic never runs this guard.',
+      hint: 'Open Support Chat and pick `LLM10 — Unbounded consumption` in the Challenge mode dropdown. The guard is off in LLM01 mode.',
     },
     {
       level: 2,
-      hint: 'Think about what grows without bound in a naive chat backend: payloads, transcripts, pacing, model output accumulated in the UI.',
+      hint: 'Three things are unbounded in this backend: a single bot reply, the prior chat history, and the request rate. Trip any one of them.',
     },
     {
       level: 3,
-      hint: 'If something feels inconsistent run-to-run, try varying how you drive the endpoint (bulk vs chunked, scripted vs manual).',
+      hint: 'Easiest path: get the bot to produce one very long reply (>5,000 chars) in a single turn. Pick a request with no natural stopping point.',
+    },
+    {
+      level: 4,
+      hint: 'Try: "List every country in the world with its capital, currency, and main official language. Do not abbreviate. Do not skip any." Or "Print the lyrics of 99 Bottles of Beer from 99 down to 1, no skipping."',
+    },
+    {
+      level: 5,
+      hint: 'Alternative routes: forge a 60,000+ char `history` array in the request via DevTools/curl, or POST to /api/support-chat six times within ten seconds.',
     },
   ],
   surface: {
@@ -34,6 +40,6 @@ module.exports = {
     label: 'Open Support Chat page',
     title: 'Support surfaces',
     description:
-      'Use Support Chat from the launcher or `/support-bot` and enable the LLM10 challenge mode.',
+      'Use the Help & support launcher on the home page or open `/support-bot`, then enable the LLM10 challenge mode.',
   },
 };

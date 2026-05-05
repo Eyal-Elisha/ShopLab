@@ -58,6 +58,16 @@ function nextId() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
+function makeGreeting(): ChatLine[] {
+  return [
+    {
+      id: nextId(),
+      role: "assistant",
+      text: "Hi — thanks for contacting ShopLab. How can we help you today?",
+    },
+  ];
+}
+
 export function SupportChatPanel({
   className,
   title = "ShopLab support",
@@ -75,20 +85,19 @@ export function SupportChatPanel({
   showChallengeModeSelector?: boolean;
 }) {
   const [challengeMode, setChallengeMode] = useState<SupportChallengeMode>(defaultChallengeMode);
-  const [lines, setLines] = useState<ChatLine[]>(
-    () =>
-      initialLines ?? [
-        {
-          id: nextId(),
-          role: "assistant",
-          text: "Hi — thanks for contacting ShopLab. How can we help you today?",
-        },
-      ]
-  );
+  const [lines, setLines] = useState<ChatLine[]>(() => initialLines ?? makeGreeting());
   const [draft, setDraft] = useState("");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const listEndRef = useRef<HTMLDivElement | null>(null);
+
+  function handleChallengeModeChange(next: SupportChallengeMode) {
+    if (next === challengeMode) return;
+    setChallengeMode(next);
+    setLines(initialLines ?? makeGreeting());
+    setDraft("");
+    setError(null);
+  }
 
   useEffect(() => {
     listEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -130,7 +139,7 @@ export function SupportChatPanel({
             <Label htmlFor="support-challenge-mode" className="text-xs text-muted-foreground shrink-0 whitespace-nowrap">
               Challenge mode
             </Label>
-            <Select value={challengeMode} onValueChange={(v) => setChallengeMode(v as SupportChallengeMode)}>
+            <Select value={challengeMode} onValueChange={(v) => handleChallengeModeChange(v as SupportChallengeMode)}>
               <SelectTrigger id="support-challenge-mode" className="h-8 text-xs sm:min-w-[200px]" aria-label="Challenge mode">
                 <SelectValue placeholder="Mode" />
               </SelectTrigger>
