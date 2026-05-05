@@ -4,7 +4,7 @@ import { api, extractApiError, type AuthUser } from "@/lib/api";
 interface AuthContextType {
   user: AuthUser | null;
   setUser: (user: AuthUser | null) => void;
-  login: (username: string, password: string, rememberMe?: boolean) => Promise<{ success: boolean; message: string }>;
+  login: (username: string, password: string, rememberMe?: boolean) => Promise<LoginResult>;
   register: (username: string, email: string, password: string) => Promise<{ success: boolean; message: string }>;
   logout: () => Promise<void>;
   isAdmin: boolean;
@@ -12,6 +12,12 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+interface LoginResult {
+  success: boolean;
+  message: string;
+  challengeLogin?: boolean;
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -32,6 +38,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const payload = { username, password, rememberMe };
       const response = await api.login(payload);
+      if (!response.user) {
+        return {
+          success: false,
+          challengeLogin: true,
+          message: response.message || "",
+        };
+      }
       setUser(response.user);
       return { success: true, message: "Login successful" };
     } catch (error) {

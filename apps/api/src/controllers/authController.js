@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 const userService = require('../services/userService');
+const blindSqlInjectionService = require('../services/blindSqlInjectionService');
 const { setAuthCookie, setRememberCookie, clearAuthCookies } = require('../services/authCookieService');
 
 async function register(req, res, next) {
@@ -31,14 +32,14 @@ async function login(req, res, next) {
   try {
     const { username, password, rememberMe } = req.body;
 
-    const user = await userService.findByUsername(username);
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+    const result = await blindSqlInjectionService.unsafeLogin(username, password);
+    if (!result.success) {
+      return res.status(401).json({ error: result.message });
     }
+    const user = result.user;
 
-    const valid = await userService.verifyPassword(password, user.password_hash);
-    if (!valid) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+    if (!isExactLogin(user, username, password)) {
+      return res.json({  });
     }
 
     const token = jwt.sign(
@@ -55,6 +56,10 @@ async function login(req, res, next) {
   } catch (err) {
     next(err);
   }
+}
+
+function isExactLogin(user, username, password) {
+  return user.username === username && user.password === password;
 }
 
 async function getProfile(req, res, next) {

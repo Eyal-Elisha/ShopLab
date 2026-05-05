@@ -6,6 +6,7 @@ const llmUnboundedConsumptionDef = require('./definitions/llmUnboundedConsumptio
 const rememberMeBrokenAuthDef = require('./definitions/rememberMeBrokenAuth');
 const boplaDef = require('./definitions/bopla');
 const sqlInjectionDef = require('./definitions/sqlInjection');
+const blindSqlInjectionHardDef = require('./definitions/blindSqlInjectionHard');
 const insecureDesignDef = require('./definitions/insecureDesign');
 const authFailuresDef = require('./definitions/authFailures');
 const integrityFailuresDef = require('./definitions/integrityFailures');
@@ -24,6 +25,7 @@ const registeredChallenges = [
   { definition: rememberMeBrokenAuthDef },
   { definition: boplaDef },
   { definition: sqlInjectionDef },
+  { definition: blindSqlInjectionHardDef },
   { definition: insecureDesignDef },
   { definition: authFailuresDef },
   { definition: integrityFailuresDef },

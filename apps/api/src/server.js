@@ -12,6 +12,7 @@ const errorHandler = require('./middleware/errorHandler');
 const challengeProgressService = require("./services/challengeProgressService");
 const couponService = require("./services/couponService");
 const productService = require("./services/productService");
+const blindSqlInjectionService = require("./services/blindSqlInjectionService");
 
 const app = express();
 const corsOptions = {
@@ -100,6 +101,7 @@ async function start() {
   await productService.ensureSeed();
   await challengeProgressService.ensureTable();
   await couponService.ensureTables();
+  await blindSqlInjectionService.ensureTable();
   app.listen(config.server.port, () => {
     console.log(`[SERVER] Running on http://localhost:${config.server.port} (${config.server.env})`);
   });
