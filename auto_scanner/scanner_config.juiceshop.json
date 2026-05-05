@@ -1,0 +1,100 @@
+{
+  "_comment": "Active-lab profile for OWASP Juice Shop on port 3000.",
+  "profile": "active-lab",
+  "active_mode": true,
+
+  "scanners": {
+    "http_checks": true,
+    "discovery": true,
+    "ssl": true,
+    "active_web": true,
+    "active_api": true,
+    "stateful_lab": false,
+    "authenticated_probes": true,
+    "exploit_validator": true,
+    "browser": true,
+    "dirb": true,
+    "sqlmap": true,
+    "nuclei": true,
+    "nikto": true,
+    "zap": true
+  },
+
+  "stateful_enabled": false,
+  "authenticated_probes_enabled": true,
+  "browser_enabled": true,
+  "browser_routes": ["/", "/#/score-board", "/#/administration", "/#/search", "/#/login"],
+
+  "timeout": 900,
+  "validation": {
+    "enabled": true,
+    "intensity": "aggressive-lab",
+    "zap_mode": "full"
+  },
+
+  "zap_docker": true,
+  "zap_docker_network": null,
+  "zap_docker_target_container": null,
+
+  "extra_endpoints": [
+    "/",
+    "/rest/products/search?q=test",
+    "/rest/user/login",
+    "/rest/basket/1",
+    "/api/Challenges",
+    "/api/Feedbacks",
+    "/api/Users"
+  ],
+
+  "http_timeout": 10,
+  "request_delay": 0.05,
+
+  "auth": {
+    "enabled": false,
+    "login_path": "rest/user/login",
+    "method": "POST",
+    "json": true,
+    "username_field": "email",
+    "password_field": "password",
+    "username": "",
+    "password": ""
+  },
+
+  "stateful": {
+    "create_users": false,
+    "registration_path": "api/Users",
+    "login_path": "rest/user/login",
+    "login_payload": {"email": "{email}", "password": "{password}"},
+    "profile_paths": ["api/Users/me", "rest/user/whoami"]
+  },
+
+  "experimental_auth": true,
+  "authenticated_probes_probe_state_changing_writes": true,
+  "authenticated_probes_probe_price_manipulation": false,
+  "authenticated_probes_include_common_search_fallbacks": true,
+
+  "authenticated_probes_max_get": 60,
+  "authenticated_probes_max_coupon": 80,
+  "authenticated_probes_max_escalation": 120,
+  "authenticated_probes_max_flag_probes": 30,
+  "authenticated_probes_extra_codes": [],
+  "authenticated_probes_product_detail_max": 50,
+
+  "exploit_validator_id_budget": 100,
+  "exploit_validator_file_budget": 50,
+  "exploit_validator_sql_budget": 50,
+  "exploit_validator_id_ceiling": 80,
+  "exploit_validator_product_limit": 20,
+  "exploit_validator_register_path": "api/Users",
+  "exploit_validator_login_path": "rest/user/login",
+
+  "sqlmap_after_broad_scans": true,
+  "sqlmap_max_targets": 8,
+  "nuclei_tags": "cve,vuln,exposure,misconfig,panel,default-login",
+  "nuclei_rate_limit": 50,
+  "nuclei_concurrency": 10,
+  "nuclei_max_urls": 25,
+  "active_web_max_param_tests": 25,
+  "active_api_max_get_tests": 40,
+  "nikto_args": []
+}

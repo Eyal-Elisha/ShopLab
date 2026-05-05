@@ -1,0 +1,7 @@
+# auto_scanner has no required third-party dependencies.
+# Everything is built on the Python standard library so the orchestrator
+# runs on any Python >= 3.8 install without extra setup.
+#
+# Add optional extras here if you extend the project later, for example:
+#   jinja2>=3.0      # richer HTML templating
+#   requests>=2.31   # HTTP probes
