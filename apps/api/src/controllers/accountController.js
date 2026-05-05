@@ -20,15 +20,34 @@ async function updateSettings(req, res, next) {
     }
 
     const promoKey = req.headers['x-promo-key'];
-    if (role && promoKey) {
-      const valid = await couponService.validatePromoKey(promoKey);
-      if (valid) {
-        await userService.updateUserRole(userId, role);
+    let roleUpdated = false;
+    let roleIgnored = false;
+    if (role) {
+      if (promoKey) {
+        const valid = await couponService.validatePromoKey(promoKey);
+        if (valid) {
+          await userService.updateUserRole(userId, role);
+          roleUpdated = true;
+        } else {
+          roleIgnored = true;
+        }
+      } else {
+        roleIgnored = true;
       }
     }
 
+    const nameUpdated = firstName !== undefined || lastName !== undefined;
+    const nothingChanged = !nameUpdated && !roleUpdated;
+
     const user = await userService.findById(userId);
-    res.json({ user, message: 'Settings updated' });
+    const response = {
+      user,
+      message: nothingChanged ? 'No changes applied.' : 'Settings updated.',
+    };
+    if (roleIgnored) {
+      response.ignored = { role: 'Role changes require a valid X-Promo-Key header.' };
+    }
+    res.json(response);
   } catch (err) {
     next(err);
   }
