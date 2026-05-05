@@ -6,7 +6,7 @@ module.exports = {
     'Locate an object containing a secret signature: "internal_access_hint". ' + 
     'Once found, change that specific object’s name to "Eval" to trigger the flag.',
   category: 'API5:2023 Broken Function Level Authorization',
-  difficulty: 'hard',
+  difficulty: 'easy',
   internalDifficulty: 7,
   flag: 'SHOPLAB{BFLA_METHOD_SWAP_SUCCESS}',
   learningObjectives: [

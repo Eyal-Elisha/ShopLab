@@ -10,7 +10,8 @@ async function getProfileById(req, res, next) {
     }
 
     const result = await query(
-      `SELECT u.*, ur.role
+      `SELECT u.id, u.username, u.email, u.first_name, u.last_name,
+              u.created_at, u.updated_at, ur.role
        FROM users u
        LEFT JOIN user_roles ur ON u.id = ur.user_id
        WHERE u.id = $1`,

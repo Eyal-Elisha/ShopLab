@@ -15,8 +15,8 @@ module.exports = {
     'Recognize when identity data is trusted without proper verification',
   ],
   hints: [
-    { level: 1, hint: 'Check how the server determines who you are when a request is made.' },
+    { level: 1, hint: 'Try to log-in in another way.' },
     { level: 2, hint: 'Look at what browser storage changes after a successful login.' },
-    { level: 3, hint: 'Base64 isn\'t always enough...' },
+    { level: 3, hint: 'Use Base 64.' },
   ],
 };
