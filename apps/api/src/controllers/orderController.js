@@ -42,7 +42,7 @@ async function checkout(req, res, next) {
             message = 'Order placed successfully. Wait, did you just change the price tag?';
             
             // Save the flag to the order so it appears in the receipt UI
-            await orderService.updateStatus(order.id, 'COMPLETED');
+            await orderService.updateStatus(order.id, 'delivered');
             await orderService.updateStaffNotes(order.id, `FLAG: ${flag}`);
             break;
           }
