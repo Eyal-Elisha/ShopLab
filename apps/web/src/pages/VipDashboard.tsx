@@ -10,7 +10,7 @@ interface VipResult {
   prefs?: Record<string, unknown>;
 }
 
-export default function VipDashboard() {
+export default function AdminDashboard() {
   const [result, setResult] = useState<VipResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [accessed, setAccessed] = useState(false);
@@ -19,11 +19,10 @@ export default function VipDashboard() {
     setLoading(true);
     setAccessed(false);
     try {
-      const data = await api.callAnyApi<VipResult>("/api/user/me/vip");
+      const data = await api.callAnyApi("/api/auth/jwt-flag");
       setResult(data);
     } catch (err) {
       const msg = extractApiError(err);
-      // Try to pull the full error object so we can show the role hint
       const raw = err as Record<string, unknown>;
       setResult({ error: msg, message: raw?.message as string | undefined });
     } finally {
@@ -48,20 +47,20 @@ export default function VipDashboard() {
             !accessed
               ? "bg-muted"
               : isGranted
-              ? "bg-yellow-500/10 ring-2 ring-yellow-500/30"
+              ? "bg-red-500/10 ring-2 ring-red-500/30"
               : "bg-destructive/10 ring-2 ring-destructive/20"
           }`}>
             {!accessed ? (
               <Crown className="w-8 h-8 text-muted-foreground" />
             ) : isGranted ? (
-              <ShieldCheck className="w-8 h-8 text-yellow-500" />
+              <ShieldCheck className="w-8 h-8 text-red-500" />
             ) : (
               <Lock className="w-8 h-8 text-destructive" />
             )}
           </div>
-          <h1 className="text-2xl font-display font-bold">VIP Dashboard</h1>
+          <h1 className="text-2xl font-display font-bold">Admin Control Panel</h1>
           <p className="text-sm text-muted-foreground">
-            Exclusive area for ShopLab premium members.
+            Strictly restricted to ShopLab system administrators.
           </p>
         </div>
 
@@ -69,13 +68,13 @@ export default function VipDashboard() {
         {accessed && (
           <div className={`rounded-xl border p-6 space-y-4 ${
             isGranted
-              ? "border-yellow-500/30 bg-yellow-500/5"
+              ? "border-red-500/30 bg-red-500/5"
               : "border-destructive/30 bg-destructive/5"
           }`}>
             {isGranted ? (
               <>
-                <p className="text-sm font-medium text-yellow-600 dark:text-yellow-400">
-                  🏆 Access Granted - Welcome to the VIP lounge.
+                <p className="text-sm font-medium text-red-600 dark:text-red-400">
+                  ⚡ Access Granted - Welcome, Root User.
                 </p>
                 <p className="text-sm text-muted-foreground">{result?.message}</p>
                 <div className="rounded-lg bg-background border p-3 font-mono text-sm break-all select-all">
@@ -95,7 +94,7 @@ export default function VipDashboard() {
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {result?.message ||
-                    "This area is restricted to premium members only."}
+                    "This area is restricted to system administrators only."}
                 </p>
 
               </>

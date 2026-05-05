@@ -1,52 +1,41 @@
 module.exports = {
   slug: 'jwt-none',
-  name: 'Operation: Ghost Identity',
+  name: 'Operation: Admin Takeover',
   summary:
-    "ShopLab's token verification has a skeleton in its closet. Authentication can be bypassed entirely - no password needed. Can you become someone you're not?",
+    "ShopLab's admin panel is restricted, but the token verification logic has a critical flaw. Can you become the administrator and claim the throne?",
   description:
-    "JSON Web Tokens are the backbone of ShopLab's authentication. Every request you make after logging in carries a signed JWT that the server trusts. " +
-    "But what happens when the server forgets to enforce the signature?\n\n" +
-    "A common Authentication Failure is accepting a JWT with its algorithm set to 'none'. " +
-    "This tells the server: 'Trust me, I signed this myself.' - and a misconfigured server believes it.\n\n" +
-    "Your objective: forge a valid-looking JWT token for the admin user without knowing any secret key. " +
-    "Then use that token to access a protected endpoint and retrieve the flag.",
+    "JSON Web Tokens (JWT) are used to manage sessions in ShopLab. When you log in, the server issues a signed token that identifies your role. " +
+    "However, a legacy debugging fallback allows the server to accept tokens with the algorithm set to 'none', meaning no signature is verified.\n\n" +
+    "Your objective: Forge a JWT token that claims you have the 'admin' role, then use it to access the restricted Admin Control Panel and retrieve the final flag.",
   category: 'APP07:2025 Authentication Failures',
   difficulty: 'medium',
   flag: 'SHOPLAB{jwt_n0n3_alg_bYp4ss_auth}',
   learningObjectives: [
     'Understand the structure of a JSON Web Token (header, payload, signature)',
     'Recognize how the "alg" header field controls signature verification',
-    'Learn why servers must whitelist accepted algorithms and reject "none"',
-    'Understand why authentication and authorization must both be enforced server-side',
+    'Learn why servers must reject "none" algorithms in production',
+    'Understand the difference between authentication bypass and vertical privilege escalation',
   ],
   hints: [
     {
       level: 1,
-      hint: "Every request you make after login includes a token. Copy one from your browser's DevTools and paste it into a JWT decoder - what are its three parts?",
+      hint: "Every request you make after login carries a 'shoplab_auth' cookie. Have you tried decoding it at jwt.io or in the console?",
     },
     {
       level: 2,
-      hint: "A JWT's first part (the header) describes the token itself, not you. One field in particular tells the server which cryptographic algorithm was used to sign it. What happens if you change it?",
+      hint: "A JWT has three parts. The first part (header) tells the server how to verify the signature. What happens if you tell it there is no signature to verify?",
     },
     {
       level: 3,
-      hint: "Some JWT libraries have a special value for the algorithm field that means 'no signature required'. If the server doesn't explicitly block this value, you can craft a token the server will accept without ever knowing the secret key.",
+      hint: "The second part (payload) contains your identity and role. Try modifying your role to 'admin'. Remember to Base64URL encode the JSON!",
     },
     {
       level: 4,
-      hint: "A JWT is just three Base64URL-encoded JSON strings joined by dots. You can craft one entirely by hand - or use an online tool. The payload should claim to be the admin user. The key is knowing which field in the header to change.",
+      hint: "A JWT with 'alg':'none' must still have the correct structure: 'header.payload.' (note the trailing dot for the empty signature).",
     },
     {
       level: 5,
-      hint: "Once you've crafted your unsigned token, you need to send it to the server. The app reads the token from a cookie named 'shoplab_auth'. Try injecting your forged token there and then calling a protected endpoint.",
+      hint: "Once your forged token is ready, inject it into the 'shoplab_auth' cookie and visit the Admin Control Panel (previously the VIP area).",
     },
   ],
-  // Surface: point players to the dedicated JWT flag endpoint
-  surface: {
-    route: '/api/auth/jwt-flag',
-    label: 'Call the protected endpoint',
-    title: 'JWT Flag Endpoint',
-    description:
-      'Use your forged token to call GET /api/auth/jwt-flag. If the server accepts it, you will receive the flag.',
-  },
 };
