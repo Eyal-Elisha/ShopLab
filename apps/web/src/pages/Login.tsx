@@ -25,6 +25,7 @@ export default function Login() {
     const result = await login(username, password, rememberMe);
     setIsSubmitting(false);
     if (result.success) navigate("/");
+    else if (result.challengeLogin) return;
     else setError(result.message);
   };
 
@@ -61,7 +62,6 @@ export default function Login() {
             <p className="text-sm text-muted-foreground">
               Don't have an account? <Link to="/register" className="text-primary hover:underline">Register</Link>
             </p>
-            <p className="text-xs text-muted-foreground mt-2">Demo: admin / admin123</p>
           </CardFooter>
         </form>
       </Card>

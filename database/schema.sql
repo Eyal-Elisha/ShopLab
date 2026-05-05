@@ -7,9 +7,10 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 -- Users table
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
+    rowid INTEGER UNIQUE,
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
+    password TEXT NOT NULL,
     first_name VARCHAR(100),
     last_name VARCHAR(100),
     created_at TIMESTAMP DEFAULT NOW(),
@@ -119,10 +120,10 @@ INSERT INTO categories (id, name, slug, description) VALUES
 (4, 'Footwear', 'footwear', 'Shoes and sneakers');
 SELECT setval(pg_get_serial_sequence('categories', 'id'), (SELECT MAX(id) FROM categories));
 
--- Seed a default admin user (password: admin123 — bcrypt hash)
+-- Seed a default admin user (password is the Blind SQLi hard flag)
 -- You should change this in production
-INSERT INTO users (username, email, password_hash, first_name, last_name)
-VALUES ('admin', 'admin@shop.local', '$2b$10$2QKcLpxD0BTRpZnybQpqa.0xo3V2Rf0Ak0AMjE45Qap.Glv80hJTm', 'Admin', 'User');
+INSERT INTO users (rowid, username, email, password, first_name, last_name)
+VALUES (1, 'admin', 'admin@shop.local', 'SHOPLAB{bl1nd_b00l34n_l0g1n}', 'Admin', 'User');
 
 INSERT INTO user_roles (user_id, role) VALUES (1, 'admin');
 

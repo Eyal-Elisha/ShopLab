@@ -190,8 +190,8 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
 }
 
 export const api = {
-  login: (body: { username: string; password: string }) =>
-    request<{ user: AuthUser }>("/auth/login", {
+  login: (body: { username: string; password: string; rememberMe?: boolean }) =>
+    request<{ user?: AuthUser; challengeLogin?: boolean; message?: string }>("/auth/login", {
       method: "POST",
       body,
     }),
@@ -272,9 +272,9 @@ export const api = {
         ...(challengeMode !== undefined ? { challengeMode } : {}),
       },
     }),
-  callAnyApi: (path: string, method: string = "GET", body?: unknown) => {
+  callAnyApi: <T = unknown>(path: string, method: string = "GET", body?: unknown) => {
     // Strip leading /api if present because the request helper adds it back
     const apiPath = path.startsWith("/api") ? path.slice(4) : path;
-    return request<any>(apiPath, { method, body });
+    return request<T>(apiPath, { method, body });
   },
 };

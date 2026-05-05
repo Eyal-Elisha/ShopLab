@@ -19,7 +19,7 @@ export default function VipDashboard() {
     setLoading(true);
     setAccessed(false);
     try {
-      const data = await api.callAnyApi("/api/user/me/vip");
+      const data = await api.callAnyApi<VipResult>("/api/user/me/vip");
       setResult(data);
     } catch (err) {
       const msg = extractApiError(err);

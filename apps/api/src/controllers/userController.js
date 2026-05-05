@@ -58,7 +58,7 @@ async function updatePassword(req, res, next) {
     const user = await userService.findAuthById(req.user.id);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    const valid = await userService.verifyPassword(req.body.currentPassword, user.password_hash);
+    const valid = userService.verifyPassword(req.body.currentPassword, user.password);
     if (!valid) {
       return res.status(401).json({ error: 'Current password is incorrect' });
     }

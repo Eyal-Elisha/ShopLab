@@ -2,9 +2,6 @@
 // User Service — Raw SQL queries for user operations
 // ============================================================
 const { query } = require('./db');
-const bcrypt = require('bcrypt');
-
-const SALT_ROUNDS = 10;
 
 /**
  * Find user by username.
@@ -28,7 +25,7 @@ async function findById(id) {
 }
 
 async function findAuthById(id) {
-  const sql = 'SELECT id, password_hash FROM users WHERE id = $1';
+  const sql = 'SELECT id, password FROM users WHERE id = $1';
   const result = await query(sql, [id]);
   return result.rows[0] || null;
 }
@@ -46,10 +43,11 @@ async function findByEmailExceptId(email, userId) {
 }
 
 async function createUser({ username, email, password, firstName, lastName }) {
-  const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
-  const sql = `INSERT INTO users (username, email, password_hash, first_name, last_name)
-               VALUES ($1, $2, $3, $4, $5) RETURNING id, username, email, first_name, last_name, created_at`;
-  const result = await query(sql, [username, email, passwordHash, firstName, lastName]);
+  const sql = `INSERT INTO users (username, email, password, first_name, last_name)
+               VALUES ($1, $2, $3, $4, $5)
+               RETURNING id, username, email, first_name, last_name, created_at`;
+  const result = await query(sql, [username, email, password, firstName, lastName]);
+  await query('UPDATE users SET rowid = id WHERE id = $1 AND rowid IS NULL', [result.rows[0].id]);
   
   // Assign default 'user' role
   await query('INSERT INTO user_roles (user_id, role) VALUES ($1, $2)', [result.rows[0].id, 'user']);
@@ -57,8 +55,8 @@ async function createUser({ username, email, password, firstName, lastName }) {
   return result.rows[0];
 }
 
-async function verifyPassword(plaintext, hash) {
-  return bcrypt.compare(plaintext, hash);
+function verifyPassword(plaintext, storedPassword) {
+  return plaintext === storedPassword;
 }
 
 async function getAllUsers() {
@@ -117,10 +115,9 @@ async function updateOwnProfile(userId, { username, email }) {
 }
 
 async function updatePassword(userId, password) {
-  const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
   const result = await query(
-    'UPDATE users SET password_hash = $1, updated_at = NOW() WHERE id = $2 RETURNING id',
-    [passwordHash, userId]
+    'UPDATE users SET password = $1, updated_at = NOW() WHERE id = $2 RETURNING id',
+    [password, userId]
   );
 
   return result.rows[0] || null;
