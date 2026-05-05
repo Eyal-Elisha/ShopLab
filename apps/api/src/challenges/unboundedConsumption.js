@@ -33,7 +33,7 @@ const CONTEXT_TRANSCRIPT_PRIOR_THRESHOLD = 60_000;
 const SINGLE_REPLY_OVERSIZE_THRESHOLD = 5000;
 
 const RAPID_WINDOW_MS = 10_000;
-const RAPID_MAX_REQUESTS = 6;
+const RAPID_MAX_REQUESTS = 9;
 
 /** @type {Map<string, number[]>} */
 const rapidBuckets = new Map();

@@ -8,7 +8,7 @@ module.exports = {
     '\n\n' +
     'Switch Support Chat into LLM10 mode and find a way to make the backend report "unbounded consumption". The flag is returned the moment the simulated guard trips.',
   category: 'LLM10:2025 Unbounded Consumption',
-  difficulty: 'easy',
+  difficulty: 'medium',
   flag: 'SHOPLAB{llm10_unb0und3d_c0nsumpt10n_lab}',
   learningObjectives: [
     'Understand unbounded consumption — without caps on output, history, or request rate an LLM backend can be driven into runaway cost or DoS.',
@@ -32,7 +32,7 @@ module.exports = {
     },
     {
       level: 5,
-      hint: 'Alternative routes: forge a 60,000+ char `history` array in the request via DevTools/curl, or POST to /api/support-chat six times within ten seconds.',
+      hint: 'Alternative routes: forge a 60,000+ char `history` array in the request via DevTools/curl, or POST to /api/support-chat nine times within ten seconds.',
     },
   ],
   surface: {
