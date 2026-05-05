@@ -1,0 +1,630 @@
+{
+  "target": "http://172.23.112.1:3000",
+  "root": "http://172.23.112.1:3000",
+  "scheme": "http",
+  "host": "172.23.112.1",
+  "port": 3000,
+  "is_https": false,
+  "is_private_or_local": true,
+  "endpoints": [
+    {
+      "url": "http://172.23.112.1:3000",
+      "path": "/",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/api/auth/jwt-flag",
+      "path": "/api/auth/jwt-flag",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": true
+    },
+    {
+      "url": "http://172.23.112.1:3000/api/products/search?q=test",
+      "path": "/api/products/search",
+      "has_query": true,
+      "query_params": [
+        "q"
+      ],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/",
+      "path": "/",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/robots.txt",
+      "path": "/robots.txt",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/ftp",
+      "path": "/ftp",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/assets/public/favicon_js.ico",
+      "path": "/assets/public/favicon_js.ico",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/styles.css",
+      "path": "/styles.css",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/chunk-24EZLZ4I.js",
+      "path": "/chunk-24EZLZ4I.js",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/chunk-T3PSKZ45.js",
+      "path": "/chunk-T3PSKZ45.js",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/chunk-4MIYPPGW.js",
+      "path": "/chunk-4MIYPPGW.js",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/chunk-LHKS7QUN.js",
+      "path": "/chunk-LHKS7QUN.js",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/chunk-TWZW5B45.js",
+      "path": "/chunk-TWZW5B45.js",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/polyfills.js",
+      "path": "/polyfills.js",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/scripts.js",
+      "path": "/scripts.js",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/main.js",
+      "path": "/main.js",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/admin",
+      "path": "/rest/admin",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/application-configuration",
+      "path": "/application-configuration",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/web3",
+      "path": "/rest/web3",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/nftUnlocked",
+      "path": "/nftUnlocked",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/nftMintListen",
+      "path": "/nftMintListen",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/api/Challenges/?key=nftMintChallenge",
+      "path": "/api/Challenges/",
+      "has_query": true,
+      "query_params": [
+        "key"
+      ],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/submitKey",
+      "path": "/submitKey",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/walletNFTVerify",
+      "path": "/walletNFTVerify",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/walletExploitAddress",
+      "path": "/walletExploitAddress",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/api/Challenges",
+      "path": "/api/Challenges",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/repeat-notification",
+      "path": "/rest/repeat-notification",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/continue-code",
+      "path": "/rest/continue-code",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/continue-code-findIt",
+      "path": "/rest/continue-code-findIt",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/continue-code-fixIt",
+      "path": "/rest/continue-code-fixIt",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/continue-code/apply/",
+      "path": "/rest/continue-code/apply/",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/continue-code-findIt/apply/",
+      "path": "/rest/continue-code-findIt/apply/",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/continue-code-fixIt/apply/",
+      "path": "/rest/continue-code-fixIt/apply/",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/country-mapping",
+      "path": "/rest/country-mapping",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/engine.io",
+      "path": "/engine.io",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/socket.io",
+      "path": "/socket.io",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/score-board",
+      "path": "/score-board",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/api/Users",
+      "path": "/api/Users",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/user/authentication-details/",
+      "path": "/rest/user/authentication-details/",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": true
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/user/login",
+      "path": "/rest/user/login",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": true
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/user/change-password?current=",
+      "path": "/rest/user/change-password",
+      "has_query": true,
+      "query_params": [
+        "current"
+      ],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/user/reset-password",
+      "path": "/rest/user/reset-password",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/user/whoami",
+      "path": "/rest/user/whoami",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/saveLoginIp",
+      "path": "/rest/saveLoginIp",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": true
+    },
+    {
+      "url": "http://172.23.112.1:3000/rest/deluxe-membership",
+      "path": "/rest/deluxe-membership",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/application-version",
+      "path": "/application-version",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/api/BasketItems",
+      "path": "/api/BasketItems",
+      "has_query": false,
+      "query_params": [],
+      "is_api": true,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/search",
+      "path": "/search",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/profile",
+      "path": "/profile",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/dataerasure",
+      "path": "/dataerasure",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/login",
+      "path": "/login",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": true
+    },
+    {
+      "url": "http://172.23.112.1:3000/accounting",
+      "path": "/accounting",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/basket",
+      "path": "/basket",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/order-history",
+      "path": "/order-history",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/recycle",
+      "path": "/recycle",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/address/saved",
+      "path": "/address/saved",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/saved-payment-methods",
+      "path": "/saved-payment-methods",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/wallet",
+      "path": "/wallet",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/contact",
+      "path": "/contact",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/complain",
+      "path": "/complain",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/chatbot",
+      "path": "/chatbot",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/about",
+      "path": "/about",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/photo-wall",
+      "path": "/photo-wall",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/deluxe-membership",
+      "path": "/deluxe-membership",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/assets",
+      "path": "/assets",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/media",
+      "path": "/media",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/promotion",
+      "path": "/promotion",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/redirect",
+      "path": "/redirect",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/video",
+      "path": "/video",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    },
+    {
+      "url": "http://172.23.112.1:3000/Video",
+      "path": "/Video",
+      "has_query": false,
+      "query_params": [],
+      "is_api": false,
+      "looks_auth_related": false
+    }
+  ],
+  "technologies": [],
+  "auth_hints": [
+    "/api/auth/jwt-flag",
+    "/rest/user/authentication-details/",
+    "/rest/user/login",
+    "/rest/saveLoginIp",
+    "/login"
+  ],
+  "api_endpoints": [
+    "http://172.23.112.1:3000/api/auth/jwt-flag",
+    "http://172.23.112.1:3000/api/products/search?q=test",
+    "http://172.23.112.1:3000/rest/admin",
+    "http://172.23.112.1:3000/rest/web3",
+    "http://172.23.112.1:3000/api/Challenges/?key=nftMintChallenge",
+    "http://172.23.112.1:3000/api/Challenges",
+    "http://172.23.112.1:3000/rest/repeat-notification",
+    "http://172.23.112.1:3000/rest/continue-code",
+    "http://172.23.112.1:3000/rest/continue-code-findIt",
+    "http://172.23.112.1:3000/rest/continue-code-fixIt",
+    "http://172.23.112.1:3000/rest/continue-code/apply/",
+    "http://172.23.112.1:3000/rest/continue-code-findIt/apply/",
+    "http://172.23.112.1:3000/rest/continue-code-fixIt/apply/",
+    "http://172.23.112.1:3000/rest/country-mapping",
+    "http://172.23.112.1:3000/api/Users",
+    "http://172.23.112.1:3000/rest/user/authentication-details/",
+    "http://172.23.112.1:3000/rest/user/login",
+    "http://172.23.112.1:3000/rest/user/change-password?current=",
+    "http://172.23.112.1:3000/rest/user/reset-password",
+    "http://172.23.112.1:3000/rest/user/whoami",
+    "http://172.23.112.1:3000/rest/saveLoginIp",
+    "http://172.23.112.1:3000/rest/deluxe-membership",
+    "http://172.23.112.1:3000/api/BasketItems"
+  ],
+  "query_urls": [
+    "http://172.23.112.1:3000/api/products/search?q=test",
+    "http://172.23.112.1:3000/api/Challenges/?key=nftMintChallenge",
+    "http://172.23.112.1:3000/rest/user/change-password?current="
+  ],
+  "wordpress_detected": false,
+  "candidate_attacks": [
+    "sqlmap",
+    "active_api",
+    "authenticated_probes",
+    "llm",
+    "zap",
+    "nikto"
+  ],
+  "discovery_counts": {
+    "discovery": 30,
+    "dirb": 9,
+    "http_checks": 4
+  },
+  "notes": []
+}

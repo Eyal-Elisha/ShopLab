@@ -1,0 +1,17 @@
+
+-----------------
+DIRB v2.22    
+By The Dark Raver
+-----------------
+
+OUTPUT_FILE: /mnt/c/Users/yamin/ShopLab/auto_scanner/results/20260505-175229_172.23.112.1_8080/raw/dirb/dirb.txt
+START_TIME: Tue May  5 17:52:30 2026
+URL_BASE: http://172.23.112.1:8080/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+OPTION: Silent Mode
+
+-----------------
+
+GENERATED WORDS: 4612
+
+---- Scanning URL: http://172.23.112.1:8080/ ----

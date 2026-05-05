@@ -1,0 +1,15 @@
+{
+  "database": {
+    "type": "sqlite",
+    "storage": "../../data/shoplab.sqlite",
+    "backup": {
+      "enabled": true,
+      "last_run": "2026-05-01T23:59:59Z",
+      "status": "SUCCESS"
+    }
+  },
+  "security": {
+    "challenge_flag": "SHOPLAB{hidd3n_b4ckup_f0und_402}",
+    "comment": "REPLACE THIS WITH REAL SECRETS IN PRODUCTION"
+  }
+}

